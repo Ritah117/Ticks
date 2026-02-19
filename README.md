@@ -1,4 +1,4 @@
- TICKS
+ #TICKS
 The first step is to  download the reference genome for Rhipicephalus appendiculatus (the brown ear tick), using  the NCBI Datasets tool, which is the modern interface for retrieving genomic data.
 
 As of 2026, there is a high-quality assembly available under the accession GCA_030522465.2.
