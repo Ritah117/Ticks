@@ -34,3 +34,16 @@ Once unzipped, you can verify everything is there by navigating to the data fold
 cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
 dir
 ```
+# Genome assembly
+copy the files to the linux working directory and
+check for the presence of any corrupted file using, 
+this is important because chemosensory genes in ticks are often low-abundance.
+
+If its missing half the data, the assembler won't have enough "overlap" to connect the pieces of a Gustatory Receptor (GR).
+```bash
+gzip -t *.fastq.gz
+```
+
+
+
+
