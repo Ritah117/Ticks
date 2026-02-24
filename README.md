@@ -43,7 +43,28 @@ If its missing half the data, the assembler won't have enough "overlap" to conne
 ```bash
 gzip -t *.fastq.gz
 ```
+# Cleaning (QC) and Normalization
+#why this is important
 
+1.The sequencer adds artificial DNA adapters to the tick RNA. If you don't remove them, the assembler (Trinity) will mistake them for real biological sequences.
 
+The risk associated with this is that you might "discover" a new protein that is actually just a piece of the Illumina sequencing kit. fastp trims these off so only Tick DNA remains.
+
+2.Improving Assembly Continuity
+
+Receptors (GRs, IRs, ORs) are long, complex proteins that weave in and out of the cell membrane seven times (7-Transmembrane domains).
+
+Sequencing quality always drops at the end of a read. These "blurry" bases act like roadblocks for the assembler.
+
+By trimming the low-quality ends, fastp allows the assembler to stitch reads together more smoothly, giving you full-length receptors instead of broken fragments.
+
+#Run this fastp loop
+```bash
+for i in 1 2 3; do
+  fastp -i Rapp${i}_1.fastq.gz -I Rapp${i}_2.fastq.gz \
+        -o clean_Rapp${i}_1.fq.gz -O clean_Rapp${i}_2.fq.gz \
+        --html Rapp${i}_report.html
+done
+```
 
 
