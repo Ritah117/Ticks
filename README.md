@@ -36,10 +36,12 @@ dir
 ```
 # Genome assembly
 copy the files to the linux working directory and
-check for the presence of any corrupted file using, 
+check for the presence of any corrupted file, 
 this is important because chemosensory genes in ticks are often low-abundance.
 
 If its missing half the data, the assembler won't have enough "overlap" to connect the pieces of a Gustatory Receptor (GR).
+
+use this 
 ```bash
 gzip -t *.fastq.gz
 ```
@@ -50,7 +52,9 @@ gzip -t *.fastq.gz
 
 The risk associated with this is that you might "discover" a new protein that is actually just a piece of the Illumina sequencing kit. fastp trims these off so only Tick DNA remains.
 
-2.Improving Assembly Continuity
+#Sequence Quality Control and Data Integrity Validation
+
+Objective: Removal of Illumina adapters and low-quality bases ($Q < 20$) to ensure high-accuracy mapping to the reference genome.
 
 Receptors (GRs, IRs, ORs) are long, complex proteins that weave in and out of the cell membrane seven times (7-Transmembrane domains).
 
@@ -58,13 +62,39 @@ Sequencing quality always drops at the end of a read. These "blurry" bases act l
 
 By trimming the low-quality ends, fastp allows the assembler to stitch reads together more smoothly, giving you full-length receptors instead of broken fragments.
 
-#Run this fastp loop
+#Run this Command for Replicate 1 (Rapp1)
 ```bash
-for i in 1 2 3; do
-  fastp -i Rapp${i}_1.fastq.gz -I Rapp${i}_2.fastq.gz \
-        -o clean_Rapp${i}_1.fq.gz -O clean_Rapp${i}_2.fq.gz \
-        --html Rapp${i}_report.html
-done
+fastp -i Rapp1_1.fastq.gz -I Rapp1_2.fastq.gz \
+      -o clean_Rapp1_1.fq.gz -O clean_Rapp1_2.fq.gz \
+      --html Rapp1_report.html --json Rapp1.json \
+      --thread 4 --qualified_quality_phred 20
+```
+#Run this Command for Replicate 2 (Rapp2)
+```bash
+fastp -i Rapp2_1.fastq.gz -I Rapp2_2.fastq.gz \
+      -o clean_Rapp2_1.fq.gz -O clean_Rapp2_2.fq.gz \
+      --html Rapp2_report.html --json Rapp2.json \
+      --thread 4 --qualified_quality_phred 20
+```
+#Run this Command for Replicate 3 (Rapp3)
+```bash
+fastp -i Rapp3_1.fastq.gz -I Rapp3_2.fastq.gz \
+      -o clean_Rapp3_1.fq.gz -O clean_Rapp3_2.fq.gz \
+      --html Rapp3_report.html --json Rapp3.json \
+      --thread 4 --qualified_quality_phred 20
 ```
 
+Following the pre-processing of each replicate, a formal data integrity check was performed. All compressed output files (.fq.gz) were verified using the gzip -t command to detect any potential truncation or bitstream errors.
+```bash
+gzip -t clean_Rapp*_*.fq.gz && echo "All chemosensory datasets verified healthy."
+```
+# Data Integrity & Crash Recovery Note
+
+All processed files were verified for integrity using gzip -t. During the processing of Replicate 3 (Rapp3), a system interruption led to file truncation (error: unexpected end of file).
+
+Resolution:
+
+Corrupted outputs were removed, the process was re-executed with reduced computational overhead (--thread 1) to ensure stability.
+
+All final datasets (Rapp1, Rapp2, and Rapp3) were re-verified and confirmed healthy before proceeding to genome-guided assembly.
 
