@@ -1,64 +1,84 @@
-#Ticks
+# Tick Genomics Project: Rhipicephalus appendiculatus
 
-The first step is to  download the reference genome for Rhipicephalus appendiculatus (the brown ear tick), using  the NCBI Datasets tool, which is the modern interface for retrieving genomic data.
+# 1.Reference Genome Acquisition
 
-As of 2026, there is a high-quality assembly available under the accession GCA_030522465.2.
-The download is through powershell 
+The first step was to download the reference genome for Rhipicephalus appendiculatus (the brown ear tick) using the NCBI Datasets tool. As of 2026, we are using the high-quality assembly GCA_030522465.2.
 
-Follow these commands to create a workspace and download the Rhipicephalus appendiculatus data:
---------------------------------------------------------------------------------
-
-1. Move to a safe workspace
-
+#Workspace Setup & Download (Windows PowerShell)
 ```bash
-# Create a folder on your C: drive for your genomic data
-mkdir C:\TickProject
-cd C:\TickProject
+# Create a workspace on the D: drive
+mkdir D:\TickGenome
+cd D:\TickGenome
 
-# Move the datasets.exe tool you just downloaded into this new folder
-move C:\WINDOWS\system32\datasets.exe C:\TickProject
-```
-#Run the download command 
-This command pulls the DNA sequence, both annotation formats (GFF3 and GTF), the proteins, and the coding sequences.
-```bash
+# Download the DNA, GFF3, GTF, proteins, and coding sequences
 .\datasets.exe download genome accession GCA_030522465.2 --include genome,gff3,gtf,protein,cds
-```
-#Unzip the downloaded file into a folder named 'GenomeData'
-```bash
-Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
-```
-#Verifying Your Files
-Once unzipped, you can verify everything is there by navigating to the data folder:
 
-```bash
+# Unzip the data
+Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
+
+# Verification of files
 cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
 dir
 ```
-# Genome assembly
-copy the files to the linux working directory and
-check for the presence of any corrupted file, 
-this is important because chemosensory genes in ticks are often low-abundance.
+# 2. Pre-Assembly Quality Control
+Before assembly, we moved the raw sequencing data to the HPC and verified the files.
 
-If its missing half the data, the assembler won't have enough "overlap" to connect the pieces of a Gustatory Receptor (GR).
+# Data Integrity Check
 
-use this 
+Because chemosensory genes in ticks are often low-abundance, a corrupted file could lead to missing data. If the file is missing data, the assembler won't have enough "overlap" to connect the pieces of a Gustatory Receptor (GR) or Odorant Receptor (OR).
+
 ```bash
+# Check for corrupted compressed files
 gzip -t *.fastq.gz
 ```
-# Cleaning (QC) and Normalization
-#why this is important
+# Sequence Cleaning with fastp
 
-1.The sequencer adds artificial DNA adapters to the tick RNA. If you don't remove them, the assembler (Trinity) will mistake them for real biological sequences.
+Objective: Removal of Illumina adapters and low-quality bases ($Q < 20$).
 
-The risk associated with this is that you might "discover" a new protein that is actually just a piece of the Illumina sequencing kit. fastp trims these off so only Tick DNA remains.
+Why this is critical for Receptors:
 
-#Sequence Quality Control and Data Integrity Validation
+Structural Complexity: Receptors are long, complex proteins that weave in and out of the cell membrane seven times (7-Transmembrane domains).
 
-Objective: Removal of Illumina adapters and low-quality bases ($Q < 20$) to ensure high-accuracy mapping to the reference genome.
+Avoiding Chimeras: Trimming adapters prevents the assembler from creating "chimera" sequences—artificial hybrids of tick DNA and sequencing adapters.
 
-Receptors (GRs, IRs, ORs) are long, complex proteins that weave in and out of the cell membrane seven times (7-Transmembrane domains).
+Read Smoothing: Trimming "blurry" bases at the ends of reads allows the assembler to stitch sequences together more accurately, giving us full-length receptors instead of fragments.
 
-Sequencing quality always drops at the end of a read. These "blurry" bases act like roadblocks for the assembler.
+#The Cleaning Command
 
-By trimming the low-quality ends, fastp allows the assembler to stitch reads together more smoothly, giving you full-length receptors instead of broken fragments.
+We used a bash loop to process Rapp1, Rapp2, and Rapp3 in one go. This ensured identical parameters were applied to all replicates.
+
+```bash
+# Navigate to the data folder
+cd ~/TickProject/raw_data
+
+# Run fastp loop
+for i in 1 2 3; do
+    fastp \
+    -i Rapp${i}_1.fastq.gz \
+    -I Rapp${i}_2.fastq.gz \
+    -o Rapp${i}_clean_1.fastq.gz \
+    -O Rapp${i}_clean_2.fastq.gz \
+    -h Rapp${i}_report.html \
+    -j fastp.json \
+    --qualified_quality_phred 20 \
+    --thread 4
+done
+```
+#Data Archiving & Backup
+
+After cleaning, we secured the data
+
+```bash
+# Backup cleaned FASTQ files
+tar -cvzf ~/TickProject_Clean_Backup.tar.gz ~/TickProject/raw_data/*_clean.fastq.gz
+
+# Backup HTML reports and the JSON summary
+tar -cvzf ~/Rapp_Reports_Backup.tar.gz ~/TickProject/raw_data/*.html ~/fastp.json
+```
+
+
+
+
+
+
 
