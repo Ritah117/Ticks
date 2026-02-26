@@ -62,39 +62,3 @@ Sequencing quality always drops at the end of a read. These "blurry" bases act l
 
 By trimming the low-quality ends, fastp allows the assembler to stitch reads together more smoothly, giving you full-length receptors instead of broken fragments.
 
-#Run this Command for Replicate 1 (Rapp1)
-```bash
-fastp -i Rapp1_1.fastq.gz -I Rapp1_2.fastq.gz \
-      -o clean_Rapp1_1.fq.gz -O clean_Rapp1_2.fq.gz \
-      --html Rapp1_report.html --json Rapp1.json \
-      --thread 4 --qualified_quality_phred 20
-```
-#Run this Command for Replicate 2 (Rapp2)
-```bash
-fastp -i Rapp2_1.fastq.gz -I Rapp2_2.fastq.gz \
-      -o clean_Rapp2_1.fq.gz -O clean_Rapp2_2.fq.gz \
-      --html Rapp2_report.html --json Rapp2.json \
-      --thread 4 --qualified_quality_phred 20
-```
-#Run this Command for Replicate 3 (Rapp3)
-```bash
-fastp -i Rapp3_1.fastq.gz -I Rapp3_2.fastq.gz \
-      -o clean_Rapp3_1.fq.gz -O clean_Rapp3_2.fq.gz \
-      --html Rapp3_report.html --json Rapp3.json \
-      --thread 4 --qualified_quality_phred 20
-```
-
-Following the pre-processing of each replicate, a formal data integrity check was performed. All compressed output files (.fq.gz) were verified using the gzip -t command to detect any potential truncation or bitstream errors.
-```bash
-gzip -t clean_Rapp*_*.fq.gz && echo "All chemosensory datasets verified healthy."
-```
-# Data Integrity & Crash Recovery Note
-
-All processed files were verified for integrity using gzip -t. During the processing of Replicate 3 (Rapp3), a system interruption led to file truncation (error: unexpected end of file).
-
-Resolution:
-
-Corrupted outputs were removed, the process was re-executed with reduced computational overhead (--thread 1) to ensure stability.
-
-All final datasets (Rapp1, Rapp2, and Rapp3) were re-verified and confirmed healthy before proceeding to genome-guided assembly.
-
