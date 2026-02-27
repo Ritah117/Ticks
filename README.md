@@ -20,7 +20,7 @@ Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
 cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
 dir
 ```
-# 2. Pre-Assembly Quality Control
+# 1. Pre-Assembly Quality Control
 Before assembly, we moved the raw sequencing data to the HPC and verified the files.
 
 # Data Integrity Check
@@ -75,10 +75,64 @@ tar -cvzf ~/TickProject_Clean_Backup.tar.gz ~/TickProject/raw_data/*_clean.fastq
 # Backup HTML reports and the JSON summary
 tar -cvzf ~/Rapp_Reports_Backup.tar.gz ~/TickProject/raw_data/*.html ~/fastp.json
 ```
+# 2. Transcriptome Assembly with Trinity
+After cleaning the data, the next step was to assemble the short reads into full-length transcripts. For ticks, which have complex transcriptomes, we used the Trinity assembler.
 
+#Data Preparation
 
+All cleaned *.fastq.gz files and HTML reports were moved to a dedicated assembly directory to simplify file paths for the assembler.
+```bash
+# Navigate to working directory
+cd ~/TickProject/assembly
 
+# Move cleaned data from raw_data folder to current assembly folder
+mv ~/TickProject/raw_data/*_clean_*.fastq.gz .
+mv ~/TickProject/raw_data/*.html .
+```
+#Assembly Strategy & Script
 
+To capture the full repertoire of chemosensory receptors (ORs, IRs, GRs, and binding proteins), we combined the reads from all three replicates (Rapp1, 2, 3). This increases coverage for low-abundance transcripts.
+
+#Bash script 
+```bash
+#!/bin/bash
+#SBATCH --job-name=Rapp_Trinity        # Name of your job
+#SBATCH --output=trinity_%j.log        # Standard output and error log
+#SBATCH --nodes=1                      # Run on a single node
+#SBATCH --ntasks=1                     # Run a single task
+#SBATCH --cpus-per-task=16             # Use 16 cores for faster assembly
+#SBATCH --mem=64G                      # Request 64GB of RAM
+#SBATCH --time=48:00:00                # Give it 2 days to finish
+
+# 1. Define the full path to the Trinity executable
+TRINITY_BIN=/opt/apps/trinity/v2.12.0/Trinity
+
+# 2. Define the working directory
+WORKDIR=/home/amukami/TickProject/assembly
+cd $WORKDIR
+
+# 3. Run Trinity using the full path
+# We combine all 3 replicates (Rapp1, 2, 3) for maximum sensitivity
+$TRINITY_BIN --seqType fq \
+        --max_memory 60G \
+        --left Rapp1_clean_1.fastq.gz,Rapp2_clean_1.fastq.gz,Rapp3_clean_1.fastq.gz \
+        --right Rapp1_clean_2.fastq.gz,Rapp2_clean_2.fastq.gz,Rapp3_clean_2.fastq.gz \
+        --CPU 16 \
+        --output $WORKDIR/trinity_out
+
+echo "Trinity Assembly Completed at $(date)"
+```
+#Execution & Monitoring
+```bash
+# Submit the job
+sbatch submit_assembly.sh
+
+# Monitor status (should be 'R' for Running)
+squeue -u amukami
+
+# Watch the log file for progress (Jellyfish, Inchworm, Chrysalis, Butterfly)
+tail -f trinity_[JOBID].log
+```
 
 
 
