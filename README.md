@@ -1,25 +1,5 @@
 # Tick Genomics Project: Rhipicephalus appendiculatus
 
-# 1.Reference Genome Acquisition
-
-The first step was to download the reference genome for Rhipicephalus appendiculatus (the brown ear tick) using the NCBI Datasets tool. As of 2026, we are using the high-quality assembly GCA_030522465.2.
-
-#Workspace Setup & Download (Windows PowerShell)
-```bash
-# Create a workspace on the D: drive
-mkdir D:\TickGenome
-cd D:\TickGenome
-
-# Download the DNA, GFF3, GTF, proteins, and coding sequences
-.\datasets.exe download genome accession GCA_030522465.2 --include genome,gff3,gtf,protein,cds
-
-# Unzip the data
-Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
-
-# Verification of files
-cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
-dir
-```
 # 1. Pre-Assembly Quality Control
 Before assembly, we moved the raw sequencing data to the HPC and verified the files.
 
@@ -134,5 +114,58 @@ squeue -u amukami
 tail -f trinity_[JOBID].log
 ```
 
+# 3.Reference Genome Acquisition
+
+The first step was to download the reference genome for Rhipicephalus appendiculatus (the brown ear tick) using the NCBI Datasets tool. As of 2026, we are using the high-quality assembly GCA_030522465.2.
+
+#Workspace Setup & Download (Windows PowerShell)
+```bash
+# Create a workspace on the D: drive
+mkdir D:\TickGenome
+cd D:\TickGenome
+
+# Download the DNA, GFF3, GTF, proteins, and coding sequences
+.\datasets.exe download genome accession GCA_030522465.2 --include genome,gff3,gtf,protein,cds
+
+# Unzip the data
+Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
+
+# Verification of files
+cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
+dir
+```
+. Genome Database Creation
+After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
+
+# 4. Genome Database Creation
+After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
+
+#Why We Are Creating These Databases
+
+Nucleotide Database (Rhip_app_genome_db): Used to map assembled transcripts back to the genome to determine exon-intron structure of ORs, IRs, and GRs.
+
+Protein Database (Rhip_app_protein_db): Used to directly search for homologs of known binding proteins using faster protein-alignment tools (like BLASTP).
+
+Tool: BLAST+ (Basic Local Alignment Search Tool)
+We will use the BLAST+ suite to create BLAST databases from the downloaded sequences.
+```bash
+# Navigate to the data directory containing the FASTA files
+cd ~/TickProject/GenomeData/ncbi_dataset/data/GCA_030522465.2/
+
+# 1. Create a BLAST database from the GENOME assembly (DNA)
+makeblastdb -in GCF_030522465.2_Rhipicephalus_appendiculatus_genomic.fna -dbtype nucl -out Rhip_app_genome_db
+
+# 2. Create a BLAST database from the PROTEIN sequences
+makeblastdb -in protein.faa -dbtype prot -out Rhip_app_protein_db
+```
+#Database Verification
+
+We verify the database creation by checking the generated files in the directory.
+```bash
+# List files to check for .nhr, .nin, .nsq files (nucleotides) 
+# and .phr, .pin, .psq files (proteins)
+ls -lh Rhip_app_genome_db.*
+ls -lh Rhip_app_protein_db.*
+```
 
 
