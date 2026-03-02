@@ -167,5 +167,50 @@ We verify the database creation by checking the generated files in the directory
 ls -lh Rhip_app_genome_db.*
 ls -lh Rhip_app_protein_db.*
 ```
+# 5. Homology Search (Protein)
+Used blastx to identify potential receptors in the assembled transcripts against the custom protein database created.
+
+#Running the search on Slurm
+
+Results
+
+receptor_hits.txt: BLAST output file containing potential receptor matches.
+
+The search was run on the HPC cluster using the following script:
+```bash
+#!/bin/bash
+#SBATCH --job-name=blastpt_job
+#SBATCH --output=blast_results.log
+#SBATCH --nodes=1
+#SBATCH --ntasks=32
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=32G
+#SBATCH --time=04:00:00
+
+# 1. Source environment modules (Required for Slurm)
+source /etc/profile.d/modules.sh
+
+# 2. Load the BLAST module
+module load blast
+
+# 3. Define paths based on your directory structure
+PROJECT_DIR="/home/amukami/TickProject"
+QUERY="$PROJECT_DIR/trinity_out/Trinity.fasta"
+DB="$PROJECT_DIR/custom_database_prot"
+OUTPUT="$PROJECT_DIR/receptor_hits.txt"
+
+# 4. Run the BLASTX command
+# Using 16 threads to match cpus-per-task
+blastx -query $QUERY \
+       -db $DB \
+       -out $OUTPUT \
+       -evalue 1e-10 \
+       -num_threads 16 \
+       -outfmt "6 qseqid sseqid pident length evalue bitscore stitle"
+```
+
+
+
+
 
 
