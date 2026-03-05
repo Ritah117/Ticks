@@ -1,3 +1,4 @@
+# Integrated Gene Discovery and RNA-seq Quantification Pipeline
 # Tick Genomics Project: Rhipicephalus appendiculatus
 
 # 1. Pre-Assembly Quality Control
