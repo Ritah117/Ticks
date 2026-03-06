@@ -1,0 +1,461 @@
+RID: UMYKS7NS016	
+Job Title:TRINITY_DN80324_c0_g1_i2 len=338 path=[0:0-337]				
+Program: BLASTN 
+Database: core_nt Core nucleotide BLAST database
+Query #1: TRINITY_DN80324_c0_g1_i2 len=338 path=[0:0-337] Query ID: lcl|Query_6490187 Length: 338
+
+Sequences producing significant alignments:
+                                                                  Scientific      Common                     Max    Total Query   E    Per.   Acc.                        
+Description                                                       Name            Name            Taxid      Score  Score cover Value  Ident  Len        Accession        
+PREDICTED: Rhipicephalus sanguineus 60S acidic ribosomal prote... Rhipicephalu... brown dog tick  34632      527    527   97%   5e-145 95.74  530        XM_037657137.2   
+PREDICTED: Dermacentor silvarum 60S acidic ribosomal protein P... Dermacentor ... NA              543639     510    510   96%   5e-140 95.09  533        XM_037711058.2   
+PREDICTED: Dermacentor silvarum 60S acidic ribosomal protein P... Dermacentor ... NA              543639     505    505   96%   2e-138 94.79  458        XM_037702424.2   
+PREDICTED: Rhipicephalus microplus ribosomal protein LP2...       Rhipicephalu... southern cat... 6941       503    503   97%   9e-138 94.22  546        XM_037428283.2   
+PREDICTED: Dermacentor variabilis ribosomal protein LP2 (RpLP2... Dermacentor ... American dog... 34621      488    488   96%   2e-133 93.87  533        XM_075684737.1   
+PREDICTED: Rhipicephalus sanguineus 60S acidic ribosomal prote... Rhipicephalu... brown dog tick  34632      486    486   97%   9e-133 93.20  449        XM_037661752.2   
+PREDICTED: Dermacentor albipictus ribosomal protein LP2 (RpLP2... Dermacentor ... NA              60249      483    483   96%   1e-131 93.56  564        XM_065453092.1   
+PREDICTED: Dermacentor andersoni ribosomal protein LP2 (RpLP2)... Dermacentor ... NA              34620      472    472   96%   2e-128 92.94  518        XM_050169679.3   
+PREDICTED: Amblyomma americanum ribosomal protein LP2 (RpLP2),... Amblyomma am... Lone Star tick  6943       394    394   96%   6e-105 88.65  524        XM_077653485.1   
+PREDICTED: Haemaphysalis longicornis ribosomal protein LP2...     Haemaphysali... longhorned tick 44386      387    387   96%   9e-103 88.04  542        XM_077676572.1   
+Haemaphysalis qinghaiensis ribosomal protein (LA-2) mRNA,...      Haemaphysali... NA              297592     350    350   96%   1e-91  86.02  433        EU682267.1       
+PREDICTED: Petromyzon marinus large ribosomal subunit protein ... Petromyzon m... sea lamprey     7757       89.8   89.8  30%   3e-13  82.52  561        XM_032949014.2   
+PREDICTED: Haliotis cracherodii large ribosomal subunit protei... Haliotis cra... black abalone   6455       76.8   76.8  21%   2e-09  86.30  456        XM_071237472.1   
+PREDICTED: Haliotis rufescens 60S acidic ribosomal protein...     Haliotis ruf... red abalone     6454       76.8   76.8  21%   2e-09  86.30  534        XM_046504233.2   
+
+
+Alignments:
+
+>PREDICTED: Rhipicephalus sanguineus 60S acidic ribosomal protein P2 (LOC119389758), mRNA
+Sequence ID: XM_037657137.2 Length: 530
+Range 1: 159 to 484
+
+Score:527 bits(285), Expect:5e-145, 
+Identities:315/329(96%),  Gaps:3/329(0%), Strand: Plus/Minus
+
+Query  10   CAGTGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTT  69
+            |||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||
+Sbjct  484  CAGTGTTGCGACGTTAGTCGAACAGGCCGAAACCCATGTCGTCATCCTCCTCGGACTCTT  425
+
+Query  70   CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaG  129
+            |||||||||||||||||||||||||||||| ||||||||||||    ||||||||| |||
+Sbjct  424  CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGC---GCCACCACCAGCAG  368
+
+Query  130  CGGCCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCA  189
+            |||||||||||||||||||||| |||||||||||||||||||||||||| || |||||||
+Sbjct  367  CGGCCGCAGGAGCGGGCGCCGCAGCAGCAGCTGCACCACCACCAGAGGGCATAGTAGCCA  308
+
+Query  190  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGA  249
+            ||||||||||||||||||||||||||||||||||| ||||||||||||||||||||||||
+Sbjct  307  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACGGTCTTTCCCTTCAGCTCGCTGATGA  248
+
+Query  250  CCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGT  309
+            |||||||||||||||||||||||||||||||||||||||| |||||||||||| ||||||
+Sbjct  247  CCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTACCGAGGATCTTCTCGATGT  188
+
+Query  310  CGGCGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||||||||||||||||||||| |||
+Sbjct  187  CGGCGGCGGATGGGTCTTTGTTGCCACCC  159
+
+
+
+
+>PREDICTED: Dermacentor silvarum 60S acidic ribosomal protein P2 (LOC119446587), mRNA
+Sequence ID: XM_037711058.2 Length: 533
+Range 1: 160 to 482
+
+Score:510 bits(276), Expect:5e-140, 
+Identities:310/326(95%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            ||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||
+Sbjct  482  TGTTGCGACGTTAGTCGAACAGGCCGAAACCCATGTCGTCATCCTCCTCGGACTCTTCCT  423
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||||||||| |||||||||||||||||||||||||   ||||
+Sbjct  422  TCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACCACCA---GCGG  366
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            ||||||||||||| || || |||||||||||||||||||||||||| |||||||||||||
+Sbjct  365  CCGCAGGAGCGGGAGCGGCAGCAGCAGCTGCACCACCACCAGAGGGCATTGTAGCCAGCT  306
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            |||||||||||||||||||||||||||||||| |||||||||||||||||||||| ||||
+Sbjct  305  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGGTCTTTCCCTTCAGCTCGCTGATCACCT  246
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            |||||||||||||||||||||||||||| ||||||||||||||||||||| |||||||||
+Sbjct  245  TGTTGAGTCGCTCGCTGTCGGATTCGATTCCGACGCTGCCGAGGATCTTCTCGATGTCGG  186
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| || |||||||| ||||||
+Sbjct  185  CGGCGGACGGATCTTTGTTTCCGCCC  160
+
+
+
+
+>PREDICTED: Dermacentor silvarum 60S acidic ribosomal protein P2 (LOC119435688), mRNA
+Sequence ID: XM_037702424.2 Length: 458
+Range 1: 87 to 409
+
+Score:505 bits(273), Expect:2e-138, 
+Identities:309/326(95%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            ||||||||||||||||||||||||||||| ||||||||||||||||||||||||||||||
+Sbjct  409  TGTTGCGACGTTAGTCGAACAGGCCGAAACCCATGTCGTCATCCTCCTCGGACTCTTCCT  350
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||||||||| |||||||||||||||||||||||||   ||||
+Sbjct  349  TCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACCACCA---GCGG  293
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            ||||||||||||| || || |||||||||||||||||||||||||| |||||||||||||
+Sbjct  292  CCGCAGGAGCGGGAGCGGCAGCAGCAGCTGCACCACCACCAGAGGGCATTGTAGCCAGCT  233
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            |||||||||||||||||||||||||||||||  |||||||||||||||||||||| ||||
+Sbjct  232  TTTCCTTGCCCTTCGCGATGACTTCGTCGACCGTCTTTCCCTTCAGCTCGCTGATCACCT  173
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            |||||||||||||||||||||||||||| ||||||||||||||||||||| |||||||||
+Sbjct  172  TGTTGAGTCGCTCGCTGTCGGATTCGATTCCGACGCTGCCGAGGATCTTCTCGATGTCGG  113
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| || |||||||| ||||||
+Sbjct  112  CGGCGGACGGATCTTTGTTTCCGCCC  87
+
+
+
+
+>PREDICTED: Rhipicephalus microplus ribosomal protein LP2 (RpLP2), mRNA
+Sequence ID: XM_037428283.2 Length: 546
+Range 1: 170 to 498
+
+Score:503 bits(272), Expect:9e-138, 
+Identities:310/329(94%),  Gaps:0/329(0%), Strand: Plus/Minus
+
+Query  10   CAGTGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTT  69
+            |||||||||||| | ||||||||||||||||| |||||||||||||||||||||||||||
+Sbjct  498  CAGTGTTGCGACCTCAGTCGAACAGGCCGAAACCCATGTCGTCATCCTCCTCGGACTCTT  439
+
+Query  70   CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaG  129
+            |||||||||||||||||||||||||||||| ||||||||||||||||||||||||| |||
+Sbjct  438  CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACCACCAGCAG  379
+
+Query  130  CGGCCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCA  189
+            |||||||||| ||||||||||| |||||||||||||||||||||||||| ||||||||||
+Sbjct  378  CGGCCGCAGGTGCGGGCGCCGCAGCAGCAGCTGCACCACCACCAGAGGGCATTGTAGCCA  319
+
+Query  190  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGA  249
+            |||| ||||||||||| || ||||||||||||||  ||||||||||||||||||||||||
+Sbjct  318  GCTTCTCCTTGCCCTTTGCAATGACTTCGTCGACCGTCTTTCCCTTCAGCTCGCTGATGA  259
+
+Query  250  CCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGT  309
+            |||| || |||||||||||||||||||||||||||||||||||||| |||||  ||||||
+Sbjct  258  CCTTTTTTAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGAATCTTTTCGATGT  199
+
+Query  310  CGGCGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| |||||||||||||||||||||
+Sbjct  198  CGGCGGCAGATGGGTCTTTGTTGCCGCCC  170
+
+
+
+
+>PREDICTED: Dermacentor variabilis ribosomal protein LP2 (RpLP2), mRNA
+Sequence ID: XM_075684737.1 Length: 533
+Range 1: 160 to 482
+
+Score:488 bits(264), Expect:2e-133, 
+Identities:306/326(94%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            ||||||||| ||| ||||||||||||||| ||||||| ||||||||||| ||||||||||
+Sbjct  482  TGTTGCGACATTAATCGAACAGGCCGAAACCCATGTCATCATCCTCCTCAGACTCTTCCT  423
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||||||||| |||||||||||||||||||||||||   ||||
+Sbjct  422  TCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACCACCA---GCGG  366
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            |||||||||||||||| || |||||||||||||||||||||||||| |||||||||||||
+Sbjct  365  CCGCAGGAGCGGGCGCAGCAGCAGCAGCTGCACCACCACCAGAGGGCATTGTAGCCAGCT  306
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            |||||||||||||||||||||||||||||||| ||||||||||||| |||||||| ||||
+Sbjct  305  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGGTCTTTCCCTTCAGTTCGCTGATCACCT  246
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            ||||||||||||||||||||||||| || ||||||||||||||||||||| |||||||||
+Sbjct  245  TGTTGAGTCGCTCGCTGTCGGATTCTATTCCGACGCTGCCGAGGATCTTCTCGATGTCGG  186
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| ||||||||||| ||||||
+Sbjct  185  CGGCGGAGGGGTCTTTGTTTCCGCCC  160
+
+
+
+
+>PREDICTED: Rhipicephalus sanguineus 60S acidic ribosomal protein P2 (LOC119394451), mRNA
+Sequence ID: XM_037661752.2 Length: 449
+Range 1: 96 to 430
+
+Score:486 bits(263), Expect:9e-133, 
+Identities:315/338(93%),  Gaps:12/338(3%), Strand: Plus/Minus
+
+Query  10   CAGTGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTT  69
+            |||||||||||||||||||||||||||||||| |||||||||||||||||||||||||||
+Sbjct  430  CAGTGTTGCGACGTTAGTCGAACAGGCCGAAACCCATGTCGTCATCCTCCTCGGACTCTT  371
+
+Query  70   CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaG  129
+            |||||||||||||||||||||||||||||| ||||||||||||    ||||||||| |||
+Sbjct  370  CCTTCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGC---GCCACCACCAGCAG  314
+
+Query  130  CGGCCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCA  189
+            | |||||||||||||||||||| |||||||||||||||||||||||||| || |||||||
+Sbjct  313  CAGCCGCAGGAGCGGGCGCCGCAGCAGCAGCTGCACCACCACCAGAGGGCATAGTAGCCA  254
+
+Query  190  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACG-----T----TCTTTCCCTTCAGCT  240
+            |||||||||||||||||||||||||||||||||||     |    |||||||||||||||
+Sbjct  253  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACGGTCTTTCGGGTCTTTCCCTTCAGCT  194
+
+Query  241  CGCTGATGACCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCT  300
+            ||||||||||||||||||||||||||||||||||||||||||||||||| ||||||||||
+Sbjct  193  CGCTGATGACCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTACCGAGGATCT  134
+
+Query  301  TCGCGATGTCGGCGGCGGATGGGTCTTTGTTGCCGCCC  338
+            || ||||||||||||||||||||||||||||||| |||
+Sbjct  133  TCTCGATGTCGGCGGCGGATGGGTCTTTGTTGCCACCC  96
+
+
+
+
+>PREDICTED: Dermacentor albipictus ribosomal protein LP2 (RpLP2), mRNA
+Sequence ID: XM_065453092.1 Length: 564
+Range 1: 191 to 513
+
+Score:483 bits(261), Expect:1e-131, 
+Identities:305/326(94%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            ||||||||| ||| ||||||||||||||| ||||||| ||||||||||| ||||||||||
+Sbjct  513  TGTTGCGACATTAATCGAACAGGCCGAAACCCATGTCATCATCCTCCTCAGACTCTTCCT  454
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||||||||| |||||||||||||||||||||    |||||||
+Sbjct  453  TCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACC---GCCAGCGG  397
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            |||||||||||||||| || |||||||||||||||||||||||||| |||||||||||||
+Sbjct  396  CCGCAGGAGCGGGCGCTGCAGCAGCAGCTGCACCACCACCAGAGGGCATTGTAGCCAGCT  337
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            |||||||||||||||||||||||||||||||| ||||||||||||| |||||||| ||||
+Sbjct  336  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGGTCTTTCCCTTCAGTTCGCTGATCACCT  277
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            ||||||||||||||||||||||||| || ||||||||||||||||||||| |||||||||
+Sbjct  276  TGTTGAGTCGCTCGCTGTCGGATTCTATTCCGACGCTGCCGAGGATCTTCTCGATGTCGG  217
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| ||||||||||| ||||||
+Sbjct  216  CGGCGGAGGGGTCTTTGTTTCCGCCC  191
+
+
+
+
+>PREDICTED: Dermacentor andersoni ribosomal protein LP2 (RpLP2), mRNA
+Sequence ID: XM_050169679.3 Length: 518
+Range 1: 145 to 467
+
+Score:472 bits(255), Expect:2e-128, 
+Identities:303/326(93%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            ||||||| | ||| ||||||||||||||| ||||||| ||||||||||| ||||||||||
+Sbjct  467  TGTTGCGGCATTAATCGAACAGGCCGAAACCCATGTCATCATCCTCCTCAGACTCTTCCT  408
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||||||||| |||||||||||||||||||||    |||||||
+Sbjct  407  TCTTTTCCTCTTTCTTGGCTGCTTCCTTTGGAGCTGCTGCACCACCACC---GCCAGCGG  351
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            |||||||||||||||| || |||||||| ||||||||||||||||| |||||||||||||
+Sbjct  350  CCGCAGGAGCGGGCGCTGCAGCAGCAGCCGCACCACCACCAGAGGGCATTGTAGCCAGCT  291
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            |||||||||||||||||||||||||||| ||| |||||||||||||||||||||| ||||
+Sbjct  290  TTTCCTTGCCCTTCGCGATGACTTCGTCAACGGTCTTTCCCTTCAGCTCGCTGATCACCT  231
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            ||||||||||||||||||||||||| || ||||||||||||||||||||| |||||||||
+Sbjct  230  TGTTGAGTCGCTCGCTGTCGGATTCTATTCCGACGCTGCCGAGGATCTTCTCGATGTCGG  171
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| ||||||||||| ||||||
+Sbjct  170  CGGCGGAGGGGTCTTTGTTTCCGCCC  145
+
+
+
+
+>PREDICTED: Amblyomma americanum ribosomal protein LP2 (RpLP2), mRNA
+Sequence ID: XM_077653485.1 Length: 524
+Range 1: 172 to 494
+
+Score:394 bits(213), Expect:6e-105, 
+Identities:289/326(89%),  Gaps:3/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            |||||||| ||||||| |||||||| ||| |||||||||| |||||||| ||||||||||
+Sbjct  494  TGTTGCGATGTTAGTCAAACAGGCCAAAACCCATGTCGTCGTCCTCCTCAGACTCTTCCT  435
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            ||||||||||||||||||||| ||||| |||||||||||||||||||||  || |  | |
+Sbjct  434  TCTTTTCCTCTTTCTTGGCTGATTCCTTTGGAGCTGCTGCACCACCACCGGCAGC--C-G  378
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            | |||||||||||||| || |||||||||||||||||||||||||| || ||||||||||
+Sbjct  377  CTGCAGGAGCGGGCGCTGCGGCAGCAGCTGCACCACCACCAGAGGGCATGGTAGCCAGCT  318
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            ||||||||||||||||||| ||||||||||||  ||| ||||||||||||||||||||||
+Sbjct  317  TTTCCTTGCCCTTCGCGATAACTTCGTCGACGGACTTCCCCTTCAGCTCGCTGATGACCT  258
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            | |||||||  |||  |||||| ||||| ||||| ||||| ||||||||| | |||||||
+Sbjct  257  TCTTGAGTCTTTCGGAGTCGGACTCGATACCGACACTGCCCAGGATCTTCTCAATGTCGG  198
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            ||||||| ||||| ||||| ||||||
+Sbjct  197  CGGCGGAGGGGTCCTTGTTTCCGCCC  172
+
+
+
+
+>PREDICTED: Haemaphysalis longicornis ribosomal protein LP2 (Rplp2), mRNA
+Sequence ID: XM_077676572.1 Length: 542
+Range 1: 191 to 516
+
+Score:387 bits(209), Expect:9e-103, 
+Identities:287/326(88%),  Gaps:0/326(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            |||||| | |||| ||||||||||||||| |||||||||| |||||||| ||||||||||
+Sbjct  516  TGTTGCAATGTTAATCGAACAGGCCGAAACCCATGTCGTCGTCCTCCTCAGACTCTTCCT  457
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            |||| ||||| ||||||| |||||||| ||||||||||||| ||||||||||||| || |
+Sbjct  456  TCTTCTCCTCCTTCTTGGGTGCTTCCTTTGGAGCTGCTGCAGCACCACCACCACCGGCAG  397
+
+Query  133  CCGCAGGAGCGGGCGCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCAGCT  192
+            | |||| ||| ||||| || || || || ||||||||||||||||| || ||||||||||
+Sbjct  396  CAGCAGCAGCTGGCGCAGCAGCGGCGGCCGCACCACCACCAGAGGGCATCGTAGCCAGCT  337
+
+Query  193  TTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCT  252
+            | ||||||||||||||||||||||||||||||  ||||||||||||||| ||||| || |
+Sbjct  336  TCTCCTTGCCCTTCGCGATGACTTCGTCGACGGACTTTCCCTTCAGCTCACTGATCACTT  277
+
+Query  253  TGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTCGG  312
+            || ||||||| ||  ||||||| ||||| ||||| ||||||||||||||| |||||||||
+Sbjct  276  TGCTGAGTCGTTCTTTGTCGGACTCGATACCGACACTGCCGAGGATCTTCTCGATGTCGG  217
+
+Query  313  CGGCGGATGGGTCTTTGTTGCCGCCC  338
+            |||||||||| |||||||| ||||||
+Sbjct  216  CGGCGGATGGATCTTTGTTTCCGCCC  191
+
+
+
+
+>Haemaphysalis qinghaiensis ribosomal protein (LA-2) mRNA, complete cds
+Sequence ID: EU682267.1 Length: 433
+Range 1: 36 to 364
+
+Score:350 bits(189), Expect:1e-91, 
+Identities:283/329(86%),  Gaps:3/329(0%), Strand: Plus/Minus
+
+Query  13   TGTTGCGACGTTAGTCGAACAGGCCGAAAACCATGTCGTCATCCTCCTCGGACTCTTCCT  72
+            |||||| | |||| ||||||||||| ||| |||||||||| |||||||| ||||||||||
+Sbjct  364  TGTTGCAATGTTAATCGAACAGGCCAAAACCCATGTCGTCGTCCTCCTCCGACTCTTCCT  305
+
+Query  73   TCTTTTCCTCTTTCTTGGCTGCTTCCTCTGGAGCTGCTGcaccaccaccaccaccaGCGG  132
+            |||||||||| ||||||| |||||||| ||||||||||||  ||||||||||||| || |
+Sbjct  304  TCTTTTCCTCCTTCTTGGGTGCTTCCTTTGGAGCTGCTGCTGCACCACCACCACCGGCTG  245
+
+Query  133  CCGCAGGAGC-GG-GC-GCCGCCGCAGCAGCTGCACCACCACCAGAGGGAATTGTAGCCA  189
+            | || | ||| || || || || || ||| |  |||||||||||| ||| ||||| ||||
+Sbjct  244  CTGCTGCAGCTGGCGCGGCAGCGGCGGCACCACCACCACCACCAGCGGGCATTGTGGCCA  185
+
+Query  190  GCTTTTCCTTGCCCTTCGCGATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGA  249
+            |||| ||||||||||||||||||||||||||||||  ||||||||||||||| ||||| |
+Sbjct  184  GCTTCTCCTTGCCCTTCGCGATGACTTCGTCGACGGACTTTCCCTTCAGCTCACTGATCA  125
+
+Query  250  CCTTGTTGAGTCGCTCGCTGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGT  309
+            | ||| ||||||| || |||||||| ||||| ||||| ||||||||||||||| | ||||
+Sbjct  124  CTTTGCTGAGTCGTTCACTGTCGGACTCGATACCGACACTGCCGAGGATCTTCTCAATGT  65
+
+Query  310  CGGCGGCGGATGGGTCTTTGTTGCCGCCC  338
+            |||||||||| || |||||||| ||||||
+Sbjct  64   CGGCGGCGGAGGGATCTTTGTTTCCGCCC  36
+
+
+
+
+>PREDICTED: Petromyzon marinus large ribosomal subunit protein P2 (LOC116939944), mRNA
+Sequence ID: XM_032949014.2 Length: 561
+Range 1: 218 to 319
+
+Score:89.8 bits(48), Expect:3e-13, 
+Identities:85/103(83%),  Gaps:2/103(1%), Strand: Plus/Minus
+
+Query  209  GATGACTTCGTCGACGTTCTTTCCCTTCAGCTCGCTGATGACCTTGTTGAG-TCGCTCGC  267
+            ||| ||||| || || |||||||||||||||||||||||||||||| |||| | |   | 
+Sbjct  319  GATCACTTCCTCTACATTCTTTCCCTTCAGCTCGCTGATGACCTTGCTGAGCTTGGA-GT  261
+
+Query  268  TGTCGGATTCGATGCCGACGCTGCCGAGGATCTTCGCGATGTC  310
+             |||||  ||||||||||| ||||||||||||||   ||||||
+Sbjct  260  CGTCGGCCTCGATGCCGACACTGCCGAGGATCTTTTTGATGTC  218
+
+
+
+
+>PREDICTED: Haliotis cracherodii large ribosomal subunit protein P2-like (LOC139455923), mRNA
+Sequence ID: XM_071237472.1 Length: 456
+Range 1: 340 to 412
+
+Score:76.8 bits(41), Expect:2e-09, 
+Identities:63/73(86%),  Gaps:3/73(4%), Strand: Plus/Minus
+
+Query  23   TTAGTCGAACAGGCCGAAAACCATGTCGTCATC--CT-CCTCGGACTCTTCCTTCTTTTC  79
+            ||||||||| || |||||  ||||||| || ||  ||  |||||||||||||||||||||
+Sbjct  412  TTAGTCGAAAAGTCCGAAGCCCATGTCCTCGTCTTCTGACTCGGACTCTTCCTTCTTTTC  353
+
+Query  80   CTCTTTCTTGGCT  92
+            |||||||||||||
+Sbjct  352  CTCTTTCTTGGCT  340
+
+
+
+
+>PREDICTED: Haliotis rufescens 60S acidic ribosomal protein P2-like (LOC124137793), mRNA
+Sequence ID: XM_046504233.2 Length: 534
+Range 1: 419 to 491
+
+Score:76.8 bits(41), Expect:2e-09, 
+Identities:63/73(86%),  Gaps:3/73(4%), Strand: Plus/Minus
+
+Query  23   TTAGTCGAACAGGCCGAAAACCATGTCGTCATC--CT-CCTCGGACTCTTCCTTCTTTTC  79
+            ||||||||| || |||||  ||||||| || ||  ||  |||||||||||||||||||||
+Sbjct  491  TTAGTCGAAAAGTCCGAAGCCCATGTCCTCGTCTTCTGACTCGGACTCTTCCTTCTTTTC  432
+
+Query  80   CTCTTTCTTGGCT  92
+            |||||||||||||
+Sbjct  431  CTCTTTCTTGGCT  419
+
+
+
+
+
+
+
+		
+
+
