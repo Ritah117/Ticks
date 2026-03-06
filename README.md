@@ -170,7 +170,14 @@ squeue -u amukami
 # Watch the log file for progress (Jellyfish, Inchworm, Chrysalis, Butterfly)
 tail -f trinity_[JOBID].log
 ```
+# Integrated Expression Pipeline
+Our pipeline utilized a dual-mapping strategy to anchor our discovery-based assembly to the physical genome:
 
+#Read Mapping (HISAT2): Raw reads were aligned to the R. appendiculatus genome to generate coordinate-sorted BAM files (95.39% alignment).
+
+#Assembly Mapping: The de novo Trinity assembly was mapped to the genome to generate a custom GTF annotation file.
+
+#Quantification (featureCounts): By intersecting the genomic BAM files with our custom GTF, we achieved a ~70% feature assignment rate.
 
 # 5. Genome Mapping (HISAT2)
 Raw reads were mapped against the Rhipicephalus NCBI genome to ensure sequence authenticity and confirm the tick-origin of our data.
