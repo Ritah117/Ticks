@@ -175,6 +175,14 @@ tail -f trinity_[JOBID].log
 # 5. Genome Mapping (HISAT2)
 Raw reads were mapped against the Rhipicephalus NCBI genome to ensure sequence authenticity and confirm the tick-origin of our data.
 
+95.39% Overall Alignment Rate
+
+We compared the mapping efficiency across our three biological replicates (Rapp1, Rapp2, Rapp3) to ensure reproducibility.
+
+Rapp1: 71.08%
+Rapp2: 63.53%
+Rapp3: 70.42%
+
 We successfully assigned approximately 3,000,000 reads per replicate, proving high data quality and low contamination.
 ```bash
 #!/bin/bash
