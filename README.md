@@ -264,7 +264,7 @@ echo "Bridge Step Complete. Trinity transcripts are now mapped to the genome."
  # 7. FeatureCounts: Expression Quantification
 We calculated raw counts for all genes across the three biological replicates to measure gene activity levels.
 
-We used featureCounts to go through our three samples (Rapp1, 2, 3) and count exactly how many times each gene was being used.
+Using featureCounts, we linked our 205,016 Trinity transcripts to specific genomic locations to quantify sensory gene expression.
 
 Replicate Rapp3 consistently showed higher raw counts: 40,000 for the top hit vs. ~28,000 in others, reflecting higher sequencing depth or metabolic activity while maintaining a consistent expression profile across all replicates
 ```bash
