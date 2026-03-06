@@ -168,47 +168,119 @@ We verify the database creation by checking the generated files in the directory
 ls -lh Rhip_app_genome_db.*
 ls -lh Rhip_app_protein_db.*
 ```
-# 5. Homology Search (Protein)
-Used blastx to identify potential receptors in the assembled transcripts against the custom protein database created.
+# 5. Genome Mapping (HISAT2)
+Raw reads were mapped against the Rhipicephalus NCBI genome to ensure sequence authenticity and confirm the tick-origin of our data.
 
-#Running the search on Slurm
-
-Results
-
-receptor_hits.txt: BLAST output file containing potential receptor matches.
-
-The search was run on the HPC cluster using the following script:
+We successfully assigned approximately 3,000,000 reads per replicate, proving high data quality and low contamination.
 ```bash
 #!/bin/bash
-#SBATCH --job-name=blastpt_job
-#SBATCH --output=blast_results.log
+#SBATCH --job-name=Tick_Genome_Map
+#SBATCH --partition=debug
 #SBATCH --nodes=1
 #SBATCH --ntasks=32
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=32G
-#SBATCH --time=04:00:00
+#SBATCH --mem=64G
+#SBATCH --time=24:00:00
+#SBATCH --output=LOG_genome_map_%j.log
 
-# 1. Source environment modules (Required for Slurm)
-source /etc/profile.d/modules.sh
+# This line ensures the 'module' command works inside the SLURM environment
+. /etc/profile.d/modules.sh || source /etc/profile.d/modules.sh
 
-# 2. Load the BLAST module
-module load blast
+# 1. Load Tools with exact version names
+module load hisat2/2.2.1
+module load samtools
 
-# 3. Define paths based on your directory structure
-PROJECT_DIR="/home/amukami/TickProject"
-QUERY="$PROJECT_DIR/trinity_out/Trinity.fasta"
-DB="$PROJECT_DIR/custom_database_prot"
-OUTPUT="$PROJECT_DIR/receptor_hits.txt"
+# 2. Setup Directories
+mkdir -p genome_mapping_results                                                  
+# Define paths for your OR/BP discovery
+GENOME="references/GCA_030522465.2_ASM3052246v2_genomic.fna"
+INDEX="references/ncbi_genome_index"
 
-# 4. Run the BLASTX command
-# Using 16 threads to match cpus-per-task
-blastx -query $QUERY \
-       -db $DB \
-       -out $OUTPUT \
-       -evalue 1e-10 \
-       -num_threads 16 \
-       -outfmt "6 qseqid sseqid pident length evalue bitscore stitle"
+# 3. Build Index (The searchable map of the genome)
+if [ ! -f "${INDEX}.1.ht2" ]; then
+    echo "Building NCBI Genome Index..."
+    hisat2-build -p 32 $GENOME $INDEX
+fi
+# 4. Map Clean Reads to Genome
+# This step finds where your Trinity transcripts 'live' on the chromosomes
+for i in 1 2 3; do
+    echo "Mapping Replicate Rapp$i to NCBI Genome..."
+    hisat2 -p 32 --dta -x $INDEX \
+        -1 Rapp${i}_clean_1.fastq.gz \
+        -2 Rapp${i}_clean_2.fastq.gz | \
+        samtools view -@ 32 -bS - | \
+        samtools sort -@ 32 -o genome_mapping_results/Rapp${i}_NCBI_Aligned.sort$
+    # Create the index (.bai) so we can see the receptors in IGV
+    samtools index genome_mapping_results/Rapp${i}_NCBI_Aligned.sorted.bam
+done
+
+echo "Process Complete. Your BAM files are in the 'genome_mapping_results' folde$
 ```
+# 6. Structural Annotation (Minimap2)
+We linked the Trinity transcripts to physical genomic coordinates using a custom-generated .gtf map to determine the physical location and scaffold of each sensory candidate within the tick genome
+```bash
+#!/bin/bash
+#SBATCH --job-name=Minimap_Bridge
+#SBATCH --partition=debug
+#SBATCH --ntasks=30
+#SBATCH --mem=40G
+#SBATCH --time=02:00:00
+#SBATCH --output=log_minimap_%j.log
+
+# 1. Load the specific module we found
+source /etc/profile.d/modules.sh
+module load minimap/2.2.22
+
+# Define Paths
+GENOME="references/GCA_030522465.2_ASM3052246v2_genomic.fna"
+TRINITY_FASTA="trinity_out/Trinity.fasta"
+
+# 2. Run Minimap2 Alignment
+# -ax splice: optimized for long transcripts vs genome
+# -t 30: uses the 16 threads we requested
+minimap2 -ax splice -t 30 $GENOME $TRINITY_FASTA > trinity_to_genome.sam
+
+# 3. Quick conversion to BAM (Optional but helpful for size)
+# If samtools is available, it makes the file much smaller
+module load samtools 2>/dev/null
+samtools view -Sb trinity_to_genome.sam > trinity_to_genome.bam
+
+echo "Bridge Step Complete. Trinity transcripts are now mapped to the genome."
+```
+ # 7. FeatureCounts: Expression Quantification
+We calculated raw counts for all genes across the three biological replicates to measure gene activity levels.
+
+Replicate Rapp3 consistently showed higher raw counts: 40,000 for the top hit vs. ~28,000 in others, reflecting higher sequencing depth or metabolic activity while maintaining a consistent expression profile across all replicates
+```bash
+#!/bin/bash
+#SBATCH --job-name=Sensory_Counts
+#SBATCH --partition=debug
+#SBATCH --ntasks=16
+#SBATCH --mem=30G
+#SBATCH --time=01:00:00
+#SBATCH --output=log_quantification.log
+
+# 1. Load the software
+source /etc/profile.d/modules.sh
+module load subread
+
+# 2. Run featureCounts
+# -p: paired-end reads
+# -T 8: use 8 threads
+# -a: your new GTF map
+# -o: the output file
+featureCounts -p -T 8 \
+  -t gene \
+  -g gene_id \
+  -a trinity_map.gtf \
+  -o sensory_gene_counts.txt \
+  genome_mapping_results/Rapp1_NCBI_Aligned.sorted.bam \
+  genome_mapping_results/Rapp2_NCBI_Aligned.sorted.bam \
+  genome_mapping_results/Rapp3_NCBI_Aligned.sorted.bam
+
+echo "Quantification complete. Check sensory_gene_counts.txt"
+
+```
+
 
 
 
