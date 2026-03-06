@@ -56,8 +56,64 @@ tar -cvzf ~/TickProject_Clean_Backup.tar.gz ~/TickProject/raw_data/*_clean.fastq
 # Backup HTML reports and the JSON summary
 tar -cvzf ~/Rapp_Reports_Backup.tar.gz ~/TickProject/raw_data/*.html ~/fastp.json
 ```
-# 2. Transcriptome Assembly with Trinity
+# 2.Reference Genome Acquisition
+
+The first step was to download the reference genome for Rhipicephalus appendiculatus (the brown ear tick) using the NCBI Datasets tool. As of 2026, we are using the high-quality assembly GCA_030522465.2.
+
+#Workspace Setup & Download (Windows PowerShell)
+```bash
+# Create a workspace on the D: drive
+mkdir D:\TickGenome
+cd D:\TickGenome
+
+# Download the DNA, GFF3, GTF, proteins, and coding sequences
+.\datasets.exe download genome accession GCA_030522465.2 --include genome,gff3,gtf,protein,cds
+
+# Unzip the data
+Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
+
+# Verification of files
+cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
+dir
+```
+. Genome Database Creation
+After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
+
+# 3. Genome Database Creation
+After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
+
+#Why We Are Creating These Databases
+
+Nucleotide Database (Rhip_app_genome_db): Used to map assembled transcripts back to the genome to determine exon-intron structure of ORs, IRs, and GRs.
+
+Protein Database (Rhip_app_protein_db): Used to directly search for homologs of known binding proteins using faster protein-alignment tools (like BLASTP).
+
+Tool: BLAST+ (Basic Local Alignment Search Tool)
+We will use the BLAST+ suite to create BLAST databases from the downloaded sequences.
+```bash
+# Navigate to the data directory containing the FASTA files
+cd ~/TickProject/GenomeData/ncbi_dataset/data/GCA_030522465.2/
+
+# 1. Create a BLAST database from the GENOME assembly (DNA)
+makeblastdb -in GCF_030522465.2_Rhipicephalus_appendiculatus_genomic.fna -dbtype nucl -out Rhip_app_genome_db
+
+# 2. Create a BLAST database from the PROTEIN sequences
+makeblastdb -in protein.faa -dbtype prot -out Rhip_app_protein_db
+```
+#Database Verification
+
+We verify the database creation by checking the generated files in the directory.
+```bash
+# List files to check for .nhr, .nin, .nsq files (nucleotides) 
+# and .phr, .pin, .psq files (proteins)
+ls -lh Rhip_app_genome_db.*
+ls -lh Rhip_app_protein_db.*
+```
+
+# 4. Transcriptome Assembly with Trinity
 After cleaning the data, the next step was to assemble the short reads into full-length transcripts. For ticks, which have complex transcriptomes, we used the Trinity assembler.
+
+we were able to piece together 205,016 complete  transcripts
 
 #Data Preparation
 
@@ -115,59 +171,7 @@ squeue -u amukami
 tail -f trinity_[JOBID].log
 ```
 
-# 3.Reference Genome Acquisition
 
-The first step was to download the reference genome for Rhipicephalus appendiculatus (the brown ear tick) using the NCBI Datasets tool. As of 2026, we are using the high-quality assembly GCA_030522465.2.
-
-#Workspace Setup & Download (Windows PowerShell)
-```bash
-# Create a workspace on the D: drive
-mkdir D:\TickGenome
-cd D:\TickGenome
-
-# Download the DNA, GFF3, GTF, proteins, and coding sequences
-.\datasets.exe download genome accession GCA_030522465.2 --include genome,gff3,gtf,protein,cds
-
-# Unzip the data
-Expand-Archive -Path ncbi_dataset.zip -DestinationPath .\GenomeData
-
-# Verification of files
-cd .\GenomeData\ncbi_dataset\data\GCA_030522465.2\
-dir
-```
-. Genome Database Creation
-After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
-
-# 4. Genome Database Creation
-After downloading the reference genome, we need to create a searchable database. This allows us to rapidly query the genome for specific receptors and compare it against our assembled transcripts.
-
-#Why We Are Creating These Databases
-
-Nucleotide Database (Rhip_app_genome_db): Used to map assembled transcripts back to the genome to determine exon-intron structure of ORs, IRs, and GRs.
-
-Protein Database (Rhip_app_protein_db): Used to directly search for homologs of known binding proteins using faster protein-alignment tools (like BLASTP).
-
-Tool: BLAST+ (Basic Local Alignment Search Tool)
-We will use the BLAST+ suite to create BLAST databases from the downloaded sequences.
-```bash
-# Navigate to the data directory containing the FASTA files
-cd ~/TickProject/GenomeData/ncbi_dataset/data/GCA_030522465.2/
-
-# 1. Create a BLAST database from the GENOME assembly (DNA)
-makeblastdb -in GCF_030522465.2_Rhipicephalus_appendiculatus_genomic.fna -dbtype nucl -out Rhip_app_genome_db
-
-# 2. Create a BLAST database from the PROTEIN sequences
-makeblastdb -in protein.faa -dbtype prot -out Rhip_app_protein_db
-```
-#Database Verification
-
-We verify the database creation by checking the generated files in the directory.
-```bash
-# List files to check for .nhr, .nin, .nsq files (nucleotides) 
-# and .phr, .pin, .psq files (proteins)
-ls -lh Rhip_app_genome_db.*
-ls -lh Rhip_app_protein_db.*
-```
 # 5. Genome Mapping (HISAT2)
 Raw reads were mapped against the Rhipicephalus NCBI genome to ensure sequence authenticity and confirm the tick-origin of our data.
 
@@ -217,6 +221,9 @@ echo "Process Complete. Your BAM files are in the 'genome_mapping_results' folde
 ```
 # 6. Structural Annotation (Minimap2)
 We linked the Trinity transcripts to physical genomic coordinates using a custom-generated .gtf map to determine the physical location and scaffold of each sensory candidate within the tick genome
+
+We got a 72%, 67%, and 72% match across our three samples.
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=Minimap_Bridge
@@ -246,8 +253,10 @@ samtools view -Sb trinity_to_genome.sam > trinity_to_genome.bam
 
 echo "Bridge Step Complete. Trinity transcripts are now mapped to the genome."
 ```
- # 7. FeatureCounts: Expression Quantification
+ # 6. FeatureCounts: Expression Quantification
 We calculated raw counts for all genes across the three biological replicates to measure gene activity levels.
+
+We used featureCounts to go through our three samples (Rapp1, 2, 3) and count exactly how many times each gene was being used.
 
 Replicate Rapp3 consistently showed higher raw counts: 40,000 for the top hit vs. ~28,000 in others, reflecting higher sequencing depth or metabolic activity while maintaining a consistent expression profile across all replicates
 ```bash
