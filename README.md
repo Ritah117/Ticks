@@ -253,7 +253,7 @@ samtools view -Sb trinity_to_genome.sam > trinity_to_genome.bam
 
 echo "Bridge Step Complete. Trinity transcripts are now mapped to the genome."
 ```
- # 6. FeatureCounts: Expression Quantification
+ # 7. FeatureCounts: Expression Quantification
 We calculated raw counts for all genes across the three biological replicates to measure gene activity levels.
 
 We used featureCounts to go through our three samples (Rapp1, 2, 3) and count exactly how many times each gene was being used.
