@@ -120,22 +120,69 @@ tail -f trinity_[JOBID].log
 
 
 # 3.Reference Genome Acquisition
-To perform a comparative analysis of chemosensory genes (ORs, IRs, GRs, and Binding Proteins), a consolidated reference proteome was constructed. This allows for a standardized search across diverse arthropod lineages.
+To perform a comparative analysis of chemosensory genes (ORs, IRs, GRs, CSPs, SNMPs, and Binding Proteins), a consolidated reference proteome was constructed. This allows for a standardized search across diverse arthropod lineages.
 
 #3.1 Species Selection 
 
 We selected 10 target arthropod species representing various ecological niches (vectors, agricultural pests, and model organisms).
-OrderSpecies
+
+## Dataset: Arthropods of Medical, Agricultural, and Research Importance
+
+This dataset contains selected **arthropod species of medical, agricultural, and scientific importance**.  
+The organisms are grouped into three categories:
+
+- **Vectors of Disease** – Species that transmit pathogens to humans or animals  
+- **Agricultural Pests** – Species that cause economic losses in crops, stored products, or livestock  
+- **Model Organisms** – Species widely used in biological and genetic research  
+
+### Species and Their Significance
+
+| Category | Species | Common Name | Ecological/Economic Significance |
+|---|---|---|---|
+| Vectors of Disease | *Rhipicephalus appendiculatus* | Brown Ear Tick | Vector of East Coast Fever (Theileriosis). |
+|  | *Aedes aegypti* | Yellow Fever Mosquito | Vector of Zika, Dengue, and Yellow Fever. |
+|  | *Anopheles gambiae* | Malaria Mosquito | Primary vector of human malaria in Africa. |
+|  | *Glossina morsitans* | Tsetse Fly | Vector of African Trypanosomiasis (Sleeping Sickness). |
+|  | *Cimex lectularius* | Bed Bug | Significant urban nuisance pest and blood-feeder. |
+| Agricultural Pests | *Stomoxys calcitrans* | Stable Fly | Livestock pest causing significant milk and meat production losses. |
+|  | *Tribolium castaneum* | Red Flour Beetle | Major pest of stored grain products worldwide. |
+|  | *Cryptotermes secundus* | Drywood Termite | Structural pest that damages timber and buildings. |
+| Model Organisms | *Drosophila melanogaster* | Vinegar Fly | Widely used model organism for genetics and olfaction research. |
+|  | *Bombyx mori* | Silk Moth | Model organism for Lepidopteran pheromone detection and silk production studies. |
+
+### Column Descriptions
+
+| Column | Description |
+|---|---|
+| Category | Classification based on ecological or research importance |
+| Species | Scientific (binomial) name of the organism |
+| Common Name | Widely used English name |
+| Ecological/Economic Significance | Biological or economic role of the organism |
+
+
+
+
+
+
 
 Rhipicephalus appendiculatus-Brown Ear Tick
+
 Aedes aegypti -Yellow Fever Mosquito
+
 Anopheles gambiae-Malaria Mosquito
+
 Glossina morsitans-Tsetse Fly
+
 Stomoxys calcitrans-Stable Fly
+
 Drosophila melanogaster-Vinegar Fly
+
 Bombyx mori-Silk Moth
+
 Tribolium castaneum-Red Flour Beetle
+
 Cimex lectularius-Bed Bug
+
 Cryptotermes secundus-Drywood Termite
 
 #3.2 Data Sourcing 
