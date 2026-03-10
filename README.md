@@ -126,8 +126,67 @@ To perform a comparative analysis of chemosensory genes (ORs, IRs, GRs, CSPs, SN
 
 We selected 10 target arthropod species representing various ecological niches The dataset contains protein sequences from 10 selected arthropod species chosen for their medical, veterinary, and scientific importance.
 
-## Dataset: Arthropods of Medical, Agricultural, and Research Importance
+# Downloading from UniProt (Reference Proteomes)
+For species like Drosophila, Anopheles, and Aedes, UniProt provides "Reference Proteomes" which are the most curated versions.
 
+```bash
+# Create a folder for the raw downloads
+mkdir -p raw_proteomes
+cd raw_proteomes
+
+# Drosophila melanogaster (UP000000589)
+wget -O Drosophila_melanogaster.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28proteome%3AUP000000589%29"
+
+# Anopheles gambiae (UP000000722)
+wget -O Anopheles_gambiae.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28proteome%3AUP000000722%29"
+
+# Aedes aegypti (UP000006203)
+wget -O Aedes_aegypti.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28proteome%3AUP000006203%29"
+
+# Bombyx mori (UP000005204)
+wget -O Bombyx_mori.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28proteome%3AUP000005204%29"
+
+# Glossina morsitans (UP000000356)
+wget -O Glossina_morsitans.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28proteome%3AUP000000356%29"
+```
+# Downloading from NCBI RefSeq (FTP)
+For the Ticks and some specialized pests, NCBI RefSeq often has more recently updated assemblies than UniProt.
+
+```bash
+# Rhipicephalus appendiculatus (Brown Ear Tick)
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/004/135/715/GCF_004135715.1_ASM413571v1/GCF_004135715.1_ASM413571v1_protein.faa.gz
+gunzip GCF_004135715.1_ASM413571v1_protein.faa.gz
+mv GCF_004135715.1_ASM413571v1_protein.faa Rhipicephalus_appendiculatus.fasta
+
+# Stomoxys calcitrans (Stable Fly)
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/272/065/GCF_003272065.1_S_calcitrans_v1.0/GCF_003272065.1_S_calcitrans_v1.0_protein.faa.gz
+gunzip GCF_003272065.1_S_calcitrans_v1.0_protein.faa.gz
+mv GCF_003272065.1_S_calcitrans_v1.0_protein.faa Stomoxys_calcitrans.fasta
+
+# Cimex lectularius (Bed Bug)
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/648/675/GCF_000648675.1_Clec_2.0/GCF_000648675.1_Clec_2.0_protein.faa.gz
+gunzip GCF_000648675.1_Clec_2.0_protein.faa.gz
+mv GCF_000648675.1_Clec_2.0_protein.faa Cimex_lectularius.fasta
+```
+# Getting the Tsetse Trio (G. fuscipes & G. brevipalpis)
+These are often found via the VectorBase section of UniProt or NCBI.
+
+```bash
+# Glossina fuscipes
+wget -O Glossina_fuscipes.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28taxonomy_id%3A44487%29"
+
+# Glossina brevipalpis
+wget -O Glossina_brevipalpis.fasta "https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=%28taxonomy_id%3A37029%29"
+4. Verification of the Downloads
+Once you have all 10 files, you should run a quick loop to check that no file is empty and to get the counts for your table:
+```
+```bash
+for file in *.fasta; do
+    echo -n "$file: "
+    grep -c ">" "$file"
+done
+```
+## Dataset: Arthropod Species of Medical, Veterinary, and Research Importance
 The organisms are grouped into three strategic categories:
 
 Medical and Veterinary Vectors – Blood-feeding species responsible for the transmission of human and animal pathogens, including the Brown Ear Tick (East Coast Fever) and a diverse Tsetse fly trio (Trypanosomiasis).
@@ -137,8 +196,6 @@ Livestock and Urban Pests – Species such as the Stable Fly and Bed Bug that ca
 Biological Model Organisms – Highly characterized species like the Vinegar Fly and Silk Moth, which serve as the gold standard for understanding insect olfaction and pheromone detection. 
 
 ### Species and Their Significance
-
-##  Arthropod Species of Medical, Veterinary, and Research Importance
 
 This table summarizes key arthropod species included in the study, their ecological category, and their biological or economic significance.
 
@@ -184,8 +241,8 @@ This table summarizes the total number of protein sequences retrieved for each s
 | *Aedes aegypti* | 20,643 | UniProt |
 | *Anopheles gambiae* | 14,102 | UniProt |
 | *Glossina morsitans* | 12,910 | UniProt |
-| *Glossina fuscipes* | ~13,500* | NCBI/UniProt |
-| *Glossina brevipalpis* | ~13,200* | NCBI/UniProt |
+| *Glossina fuscipes* | 13,500 | NCBI/UniProt |
+| *Glossina brevipalpis* | 13,200 | NCBI/UniProt |
 
 \*Approximate sequence counts based on combined database records.
 
