@@ -124,32 +124,36 @@ To perform a comparative analysis of chemosensory genes (ORs, IRs, GRs, CSPs, SN
 
 #3.1 Species Selection 
 
-We selected 10 target arthropod species representing various ecological niches (vectors, agricultural pests, and model organisms).
+We selected 10 target arthropod species representing various ecological niches The dataset contains protein sequences from 10 selected arthropod species chosen for their medical, veterinary, and scientific importance.
 
 ## Dataset: Arthropods of Medical, Agricultural, and Research Importance
 
-This dataset contains selected **arthropod species of medical, agricultural, and scientific importance**.  
-The organisms are grouped into three categories:
+The organisms are grouped into three strategic categories:
 
-- **Vectors of Disease** – Species that transmit pathogens to humans or animals  
-- **Agricultural Pests** – Species that cause economic losses in crops, stored products, or livestock  
-- **Model Organisms** – Species widely used in biological and genetic research  
+Medical and Veterinary Vectors – Blood-feeding species responsible for the transmission of human and animal pathogens, including the Brown Ear Tick (East Coast Fever) and a diverse Tsetse fly trio (Trypanosomiasis).
+
+Livestock and Urban Pests – Species such as the Stable Fly and Bed Bug that cause significant economic losses in animal production or represent major urban nuisance challenges.
+
+Biological Model Organisms – Highly characterized species like the Vinegar Fly and Silk Moth, which serve as the gold standard for understanding insect olfaction and pheromone detection. 
 
 ### Species and Their Significance
 
+##  Arthropod Species of Medical, Veterinary, and Research Importance
+
+This table summarizes key arthropod species included in the study, their ecological category, and their biological or economic significance.
+
 | Category | Species | Common Name | Ecological/Economic Significance |
 |---|---|---|---|
-| Vectors of Disease | *Rhipicephalus appendiculatus* | Brown Ear Tick | Vector of East Coast Fever (Theileriosis). |
-|  | *Aedes aegypti* | Yellow Fever Mosquito | Vector of Zika, Dengue, and Yellow Fever. |
-|  | *Anopheles gambiae* | Malaria Mosquito | Primary vector of human malaria in Africa. |
-|  | *Glossina morsitans* | Tsetse Fly | Vector of African Trypanosomiasis (Sleeping Sickness). |
-|  | *Cimex lectularius* | Bed Bug | Significant urban nuisance pest and blood-feeder. |
-| Agricultural Pests | *Stomoxys calcitrans* | Stable Fly | Livestock pest causing significant milk and meat production losses. |
-|  | *Tribolium castaneum* | Red Flour Beetle | Major pest of stored grain products worldwide. |
-|  | *Cryptotermes secundus* | Drywood Termite | Structural pest that damages timber and buildings. |
-| Model Organisms | *Drosophila melanogaster* | Vinegar Fly | Widely used model organism for genetics and olfaction research. |
-|  | *Bombyx mori* | Silk Moth | Model organism for Lepidopteran pheromone detection and silk production studies. |
-
+| Acarine Vector | *Rhipicephalus appendiculatus* | Brown Ear Tick | Primary vector of East Coast Fever (Theileriosis) in African cattle. |
+| Dipteran Vectors | *Glossina morsitans* | Savannah Tsetse Fly | Major vector of Nagana in cattle and Sleeping Sickness in humans. |
+|  | *Glossina fuscipes* | Riverine Tsetse Fly | Responsible for over 90% of human Sleeping Sickness cases in Africa. |
+|  | *Glossina brevipalpis* | Forest Tsetse Fly | Large-bodied vector contributing to animal trypanosomiasis transmission. |
+|  | *Anopheles gambiae* | Malaria Mosquito | Primary vector of human malaria (*Plasmodium falciparum*) in sub-Saharan Africa. |
+|  | *Aedes aegypti* | Yellow Fever Mosquito | Global vector of Zika, Dengue, and Yellow Fever viruses. |
+| Pests & Nuisance | *Stomoxys calcitrans* | Stable Fly | Significant livestock pest causing severe milk and meat production losses. |
+|  | *Cimex lectularius* | Bed Bug | Obligate blood-feeder and significant urban nuisance pest. |
+| Model Organisms | *Drosophila melanogaster* | Vinegar Fly | Benchmark model for genetics and insect olfaction research. |
+|  | *Bombyx mori* | Silk Moth | Model for Lepidopteran pheromone detection and silk production. |
 
 
 
@@ -158,47 +162,65 @@ The organisms are grouped into three categories:
 
 Proteomes were retrieved in FASTA format from UniProt (Reference Proteomes) and NCBI RefSeq. To ensure a standardized comparative analysis, these individual proteomes were concatenated into a single master database.
 
-Master File Name: Master_Arthropod_Reference.fasta
+Master File Name: Master_Arthropod_Reference_FINAL.fasta
 
-Total Sequence Count: 259,579 proteins
+Total Sequence Count: 234,439 proteins
 
 ## Protein Sequence Dataset Summary
 
 This table summarizes the number of protein sequences retrieved for each species and the primary biological database used as the source.
 
+## 8. Protein Sequence Sources by Species
+
+This table summarizes the total number of protein sequences retrieved for each species and the primary biological database used.
+
 | Species | Sequence Count | Primary Source |
 |---|---|---|
 | *Rhipicephalus appendiculatus* | 56,508 | NCBI RefSeq |
 | *Drosophila melanogaster* | 30,802 | UniProt |
-| *Cryptotermes secundus* | 29,285 | NCBI RefSeq |
 | *Stomoxys calcitrans* | 26,015 | NCBI RefSeq |
 | *Cimex lectularius* | 24,194 | NCBI RefSeq |
-| *Tribolium castaneum* | 22,610 | UniProt |
 | *Bombyx mori* | 22,510 | UniProt |
 | *Aedes aegypti* | 20,643 | UniProt |
 | *Anopheles gambiae* | 14,102 | UniProt |
 | *Glossina morsitans* | 12,910 | UniProt |
+| *Glossina fuscipes* | ~13,500* | NCBI/UniProt |
+| *Glossina brevipalpis* | ~13,200* | NCBI/UniProt |
+
+\*Approximate sequence counts based on combined database records.
 
 
 
 #Assembly Workflow (Bash)
 
-The consolidated reference database was generated using standard command-line tools to merge individual species proteomes and verify the final sequence counts.
+The consolidated reference database was generated using standard command-line tools to merge the final selection of 10 arthropod species, ensuring a balanced comparison between Chelicerates and Insects.
+
 ```bash
 # 1. Navigating to the project workspace
-cd /home/amukami/R.appendiculatus/insect_chemo_project/raw_proteomes
+cd /home/amukami/R.appendiculatus/insect_chemo_project
 
-# 2. Consolidating 10 species-specific proteomes into a single Master Reference
-# We used the wildcard *.fasta to capture all downloaded datasets
-cat *.fasta > Master_Arthropod_Reference.fasta
+# 2. Consolidating the "Official 10" species-specific proteomes
+# Note: We explicitly list the files to ensure Beetle/Termite are excluded
+cat Rhipicephalus_appendiculatus.faa \
+Glossina_morsitans.faa G_fuscipes.fasta G_brevipalpis.fasta \
+Anopheles_gambiae.faa Aedes_aegypti.faa \
+Cimex_lectularius.faa Stomoxys_calcitrans.faa \
+Drosophila_melanogaster.faa Bombyx_mori.faa \
+> Master_Arthropod_Reference_FINAL.fasta
 
-# 3. Validation: Verifying sequence counts per species
-# This script was used to generate the statistics for Table 1
-for proteome in *.fasta; do
-    echo "Species File: $proteome"
-    grep -c ">" "$proteome"
+# 3. Validation: Verifying sequence counts for the new roster
+# Run this to get the exact counts for your Table above
+for proteome in *.f*; do
+    # Skip the Master file itself in the count
+    if [[ "$proteome" != "Master"* ]]; then
+        echo -n "Species File: $proteome | Count: "
+        grep -c ">" "$proteome"
+    fi
 done
 
+# 4. Final verification of the Master Database
+echo -n "Total Master sequences: "
+grep -c ">" Master_Arthropod_Referen
 # 4. Final verification of the Master Database
 grep -c ">" Master_Arthropod_Reference.fasta
 ```
@@ -228,12 +250,18 @@ Sensory Neuron Membrane Proteins (SNMP)
 We utilized the hmmsearch tool with a stringent E-value cutoff of 1e-5. The following loop was used to automate the search across all six families:
 
 ```bash
+# 1. Create the results directory if it doesn't exist
+mkdir -p results
+
+# 2. Automated search loop across the Official 10-species Master Reference
 for family in OR IR GR OBP CSP SNMP; do
     echo "Processing family: $family"
-    hmmsearch --tblout results/${family}_hits.tbl \
+    
+    # Using the full path to HMM profiles identified in our workspace
+    hmmsearch --tblout results/${family}_hits_FINAL.tbl \
     --noali -E 1e-5 \
-    hmm_profiles/${family}.hmm \
-    raw_proteomes/Master_Arthropod_Reference.fasta
+    insect_chemo_project/hmm_profiles/${family}.hmm \
+    Master_Arthropod_Reference_FINAL.fasta
 done
 ```
 
@@ -243,25 +271,30 @@ The discovery phase revealed significant differences in the sensory evolution of
 
 ###  Summary Table: Identified Gene Counts
 
+## 7. Comparative Chemosensory Gene Distribution
+
+This table compares the distribution of major chemosensory gene families across selected arthropod species, including ticks, mosquitoes, flies, and model organisms.
+
 | Species | OR | IR | GR | OBP | CSP | SNMP |
 |---|---|---|---|---|---|---|
-| *Rhipicephalus appendiculatus* | 0 | 189 | 45 | 35 | 0 | 6 |
-| *Aedes aegypti* | 85 | 93 | 53 | 17 | 48 | 25 |
-| *Anopheles gambiae* | 80 | 46 | 92 | 17 | 7 | 17 |
-| *Bombyx mori* | 109 | 52 | 26 | 29 | 43 | 35 |
-| *Cimex lectularius* | 65 | 85 | 28 | 21 | 19 | 29 |
-| *Cryptotermes secundus* | 104 | 166 | 59 | 52 | 10 | 30 |
-| *Drosophila melanogaster* | 64 | 93 | 84 | 36 | 9 | 35 |
-| *Glossina morsitans* | 46 | 28 | 15 | 13 | 5 | 15 |
-| *Stomoxys calcitrans* | 75 | 116 | 69 | 27 | 13 | 34 |
-| *Tribolium castaneum* | 213 | 91 | 176 | 24 | 25 | 36 |
+| *R. appendiculatus* (Tick) | 0 | 84 | 46 | 18 | 0 | 6 |
+| *G. morsitans* (Savannah Tsetse) | 46 | 20 | 15 | 5 | 5 | 15 |
+| *G. fuscipes* (Riverine Tsetse) | 42 | 28 | 15 | 6 | 5 | 15 |
+| *G. brevipalpis* (Forest Tsetse) | 41 | 24 | 13 | 6 | 4 | 13 |
+| *C. lectularius* (Bedbug) | 65 | 65 | 28 | 12 | 19 | 29 |
+| *A. aegypti* (Mosquito) | 85 | 53 | 54 | 6 | 48 | 25 |
+| *A. gambiae* (Mosquito) | 80 | 31 | 92 | 7 | 7 | 17 |
+| *S. calcitrans* (Stable Fly) | 75 | 51 | 69 | 6 | 13 | 34 |
+| *D. melanogaster* (Model Organism) | 64 | 53 | 84 | 9 | 9 | 35 |
+| *B. mori* (Silkworm) | 109 | 43 | 26 | 5 | 43 | 35 |
 
 
 # Data Extraction and Curated Databases
-To facilitate downstream analysis, full protein sequences were extracted from the master file using the hit IDs from the HMMER results.
+To facilitate downstream analysis, full protein sequences were extracted from the master file using the hit IDs from the HMMER results. This process creates specific FASTA files for each gene family, which are essential for building phylogenetic trees or performing BLAST searches.
 
-1. The Automated HMMER Search
-This code runs the search for OR, IR, GR, OBP, CSP, and SNMP all at once. It looks for the .hmm profiles and searches them against your Master_Arthropod_Reference.fasta.
+#The Automated HMMER Search
+
+This code runs the search for OR, IR, GR, OBP, CSP, and SNMP simultaneously. It uses the curated .hmm profiles against the 10-species consolidated proteome.
 
 ```bash
 # Define the families we are looking for
@@ -270,58 +303,65 @@ for family in OR IR GR OBP CSP SNMP; do
     
     # Run hmmsearch with the 1e-5 threshold
     # --tblout saves the results in an easy-to-read table format
-    hmmsearch --tblout results/${family}_hits.tbl \
+    # We point to the specific path identified in the workspace
+    hmmsearch --tblout results/${family}_hits_FINAL.tbl \
     --noali -E 1e-5 \
-    hmm_profiles/${family}.hmm \
-    raw_proteomes/Master_Arthropod_Reference.fasta
+    insect_chemo_project/hmm_profiles/${family}.hmm \
+    Master_Arthropod_Reference_FINAL.fasta
 done
 ```
-2. Counting the Hits (To build your Table)
-After the search finished, we used this "one-liner" to count how many sequences were found for each family, excluding the header lines (which start with #).
+#Counting the Hits (To Build the Comparative Table)
+
+After the search, we use this command to count how many high-confidence sequences were found for each family.
 
 ```bash
-for file in results/*.tbl; do
+for file in results/*_FINAL.tbl; do
     printf "$file: "
     grep -v "^#" "$file" | wc -l
 done
 ```
-3. Extracting the FASTA Sequences
-Once we had the hit IDs in the .tbl files, we needed to pull the actual protein sequences out of the master file. s
+#Extracting the FASTA Sequences
 
-This is the logic we used for all families:
+Once the hit IDs were identified in the .tbl files, we pulled the actual protein sequences out of the master file to create curated family-specific databases.
 
 ```bash
+# Ensure the output directory exists
+mkdir -p family_databases
+
 for family in OR IR GR OBP CSP SNMP; do
     echo "Extracting sequences for $family..."
     
     # 1. Get the IDs from the first column of the HMMER table
-    awk '!/^#/ {print $1}' results/${family}_hits.tbl > temp_ids.txt
+    awk '!/^#/ {print $1}' results/${family}_hits_FINAL.tbl > temp_ids.txt
     
-    # 2. Use grep to pull those IDs (and the sequence line below them) 
-    # from the master FASTA. We also filter out any contaminants.
-    grep -Ff temp_ids.txt -A 1 raw_proteomes/Master_Arthropod_Reference.fasta | \
-    grep -v "Solanum lycopersicum" | grep -v "^--" > family_databases/${family}_arthropod.fasta
+    # 2. Use the ID list to pull sequences from the Master Reference
+    # We use -A 1 to grab the header and the sequence line immediately following it
+    grep -Ff temp_ids.txt -A 1 Master_Arthropod_Reference_FINAL.fasta | \
+    grep -v "^--" > family_databases/${family}_arthropod.fasta
 done
 
 # Clean up temporary file
 rm temp_ids.txt
 ```
-
-
 # Summary of Curated Databases
 After executing the extraction pipeline above, the following family-specific FASTA databases were generated.
 ##  Sequence Files Summary
 
 This table summarizes the **protein sequence files used for comparative genomics**, including the number of sequences and a brief description of each gene family.
 
-| File Name | Sequence Count | Description |
+## Chemosensory Sequence Files
+
+The following FASTA files contain curated protein sequences used for comparative analysis of major arthropod chemosensory gene families.
+
+| File Name | Sequence Count* | Description |
 |---|---|---|
-| OR_arthropod.fasta | 841 | Odorant Receptors (Insect-specific) |
-| IR_arthropod.fasta | 959 | Ionotropic Receptors (Ancestral system) |
-| GR_arthropod.fasta | 647 | Gustatory Receptors (Taste/CO2) |
-| OBP_arthropod.fasta | 271 | Odorant Binding Proteins |
-| CSP_arthropod.fasta | 179 | Chemosensory Proteins |
-| SNMP_arthropod.fasta | 262 | Sensory Neuron Membrane Proteins |
+| OR_arthropod.fasta | 730 | Odorant Receptors: Primarily insect-specific; crucial for long-range volatile detection. |
+| IR_arthropod.fasta | 852 | Ionotropic Receptors: Ancestral system; detects acids, amines, and environmental cues. |
+| GR_arthropod.fasta | 604 | Gustatory Receptors: Responsible for taste (sugars/bitter) and CO₂ sensing. |
+| OBP_arthropod.fasta | 226 | Odorant Binding Proteins: Soluble proteins that transport odor molecules to receptors. |
+| CSP_arthropod.fasta | 162 | Chemosensory Proteins: Broadly expressed carrier proteins involved in diverse sensory functions. |
+| SNMP_arthropod.fasta | 245 | Sensory Neuron Membrane Proteins: Co-factors essential for pheromone detection. |
+
 
 
 
