@@ -353,16 +353,16 @@ This table summarizes the **protein sequence files used for comparative genomics
 
 The following FASTA files contain curated protein sequences used for comparative analysis of major arthropod chemosensory gene families.
 
+## Chemosensory Gene Family Sequence Files
+
 | File Name | Sequence Count | Description |
 |---|---|---|
-| OR_arthropod.fasta | 730 | Odorant Receptors: Insect-specific; 7-TM proteins. |
-| IR_arthropod.fasta | 852 | Ionotropic Receptors: Ancestral; found in ticks & insects. |
-| GR_arthropod.fasta | 604 | Gustatory Receptors: Taste and CO₂ sensing. |
-| OBP_arthropod.fasta | 226 | Odorant Binding Proteins: Small secreted carriers. |
-| CSP_arthropod.fasta | 162 | Chemosensory Proteins: Versatile binding proteins. |
-| SNMP_arthropod.fasta | 245 | Sensory Neuron Membrane Proteins: CD36-family co-receptors. |
-
-
+| OR_arthropod.fasta | 607 | Odorant Receptors: Insect-specific proteins; key for volatile sensing. |
+| IR_arthropod.fasta | 452 | Ionotropic Receptors: Evolutionarily ancestral; found in all 10 species. |
+| GR_arthropod.fasta | 442 | Gustatory Receptors: Taste (sugar/bitter) and CO₂ sensors. |
+| OBP_arthropod.fasta | 80 | Odorant Binding Proteins: Small carriers for hydrophobic odors. |
+| CSP_arthropod.fasta | 153 | Chemosensory Proteins: Broadly expressed soluble carriers. |
+| SNMP_arthropod.fasta | 224 | Sensory Neuron Membrane Proteins: Essential pheromone co-factors. |
 
 
 
