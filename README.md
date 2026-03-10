@@ -207,7 +207,7 @@ This table summarizes key arthropod species included in the study, their ecologi
 |  | *Glossina brevipalpis* | Forest Tsetse Fly | Large-bodied vector contributing to animal trypanosomiasis transmission. |
 |  | *Anopheles gambiae* | Malaria Mosquito | Primary vector of human malaria (*Plasmodium falciparum*) in sub-Saharan Africa. |
 |  | *Aedes aegypti* | Yellow Fever Mosquito | Global vector of Zika, Dengue, and Yellow Fever viruses. |
-| Pests & Nuisance | *Stomoxys calcitrans* | Stable Fly | Significant livestock pest causing severe milk and meat production losses. |
+| Parasites | *Stomoxys calcitrans* | Stable Fly | Significant livestock pest causing severe milk and meat production losses. |
 |  | *Cimex lectularius* | Bed Bug | Obligate blood-feeder and significant urban nuisance pest. |
 | Model Organisms | *Drosophila melanogaster* | Vinegar Fly | Benchmark model for genetics and insect olfaction research. |
 |  | *Bombyx mori* | Silk Moth | Model for Lepidopteran pheromone detection and silk production. |
