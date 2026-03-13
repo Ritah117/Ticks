@@ -1,0 +1,18 @@
+# BUSCO version is: 6.0.0 
+# The lineage dataset is: arachnida_odb10 (Creation date: 2024-01-08, number of genomes: 10, number of BUSCOs: 2934)
+# Summarized benchmarking in BUSCO notation for file /nfs/amukami/R.appendiculatus/Assembly_Discovery/Trinity.fasta
+# BUSCO was run in mode: euk_tran
+
+	***** Results: *****
+
+	C:76.7%[S:9.1%,D:67.6%],F:4.4%,M:18.9%,n:2934	   
+	2250	Complete BUSCOs (C)			   
+	268	Complete and single-copy BUSCOs (S)	   
+	1982	Complete and duplicated BUSCOs (D)	   
+	129	Fragmented BUSCOs (F)			   
+	555	Missing BUSCOs (M)			   
+	2934	Total BUSCO groups searched		   
+
+Dependencies and versions:
+	hmmsearch: 3.4
+	metaeuk: 7.bba0d80
