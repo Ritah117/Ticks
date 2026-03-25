@@ -580,5 +580,125 @@ done
 ```
 
 
+# Assembly Validation and Protein Prediction
+Before proceeding to functional discovery, we evaluated the quality of our Trinity assembly to ensure it captured a representative set of the R. appendiculatus gene repertoire.
+
+# Assembly Completeness (BUSCO)
+We utilized BUSCO (v6.0.0) to assess the completeness of the transcriptome by searching for "Universal Single-Copy Orthologs." Given that R. appendiculatus is a Chelicerate, we benchmarked the assembly against the Arachnida lineage (arachnida_odb10).
+
+```bash
+#!/bin/bash
+#SBATCH --job-name=busco_only
+#SBATCH --partition=debug
+#SBATCH --ntasks=16
+#SBATCH --mem=32G
+
+# 1. Project Directory Configuration
+cd /nfs/amukami/R.appendiculatus
+
+# 2. Environment Setup
+export PATH="/opt/anaconda/bin:$PATH"
+
+# 3. BUSCO Execution
+# -l: arachnida_odb10 (lineage specific to ticks/spiders)
+# -m: transcriptome mode
+/opt/anaconda/bin/busco -i Assembly_Discovery/Trinity.fasta \
+      -l arachnida_odb10 \
+      -o busco_report_test \
+      -m transcriptome \
+      -c 8
+```
+#Quality Assessment Summary:
+
+The BUSCO results confirmed that the assembly was sufficiently complete to serve as a reliable source for chemosensory gene discovery, capturing 76.7% of the expected orthologous groups.
+
+
+
+
+
+
+
+# Proteome Generation and ORF Prediction (TransDecoder)
+Before we could begin the "Chemoblast" discovery or the HISAT2 indexing, we had to identify the actual protein-coding regions within our 205,016 Trinity transcripts. This ensures we are analyzing real biological proteins rather than transcriptomic "noise."
+
+#Identification of Longest ORFs
+
+We used TransDecoder.LongOrfs to scan all transcripts and extract every potential Open Reading Frame longer than 100 amino acids. This is the first "filter" that separates potential proteins from non-coding RNA.
+
+
+
+
+
+
+
+
+# Characterization of the R. appendiculatus Chemosensory Repertoire
+# Identifying ORs, IRs, GRs, and Binding Proteins in the R. appendiculatus Proteome
+#Genome Indexing and Mapping Preparation (HISAT2)
+
+To quantify the expression of chemosensory genes, we first mapped our cleaned RNA-seq reads back to the R. appendiculatus reference genome. This requires building a specialized index that allows for rapid, splice-aware alignment.
+ #Reference Acquisition
+ 
+We utilized the high-quality genomic assembly and its corresponding annotation (GTF) to ensure that reads are mapped to known gene loci.
+
+Genome: GCA_030522465.2_ASM3052246v2_genomic.fna
+
+Annotation: genomic.gtf
+
+ #Building the HISAT2 Index
+ 
+The indexing process converts the linear DNA sequence into a FM-index (Burrows-Wheeler Transform), which is optimized for memory efficiency and speed.
+
+A successful build generates 8 files with the .ht2 extension. These are the "roadmaps" the aligner will use.
+
+We utilized a SLURM workload manager to ensure a rapid and stable build.
+
+#The Indexing Script (index_genome.sh)
+```bash
+#!/bin/bash
+#SBATCH --job-name=Rapp_index
+#SBATCH --partition=debug
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=32G
+#SBATCH --time=04:00:00
+#SBATCH --output=index_%j.log
+
+# 1. Load HISAT2
+source /usr/share/Modules/init/bash
+module load hisat2/2.2.1
+
+# 2. Define Paths
+GENOME_DIR="/home/amukami/nfs/R.appendiculatus/references"
+# Using the exact filename found in your 'ls' output
+GENOME_FASTA="${GENOME_DIR}/GCA_030522465.2_ASM3052246v2_genomic.fna"
+INDEX_DIR="${GENOME_DIR}/hisat2_index"
+INDEX_PREFIX="${INDEX_DIR}/Rapp_index"
+
+mkdir -p "$INDEX_DIR"
+
+echo "----------------------------------------------------"
+echo "Starting HISAT2 Build for R. appendiculatus"
+echo "Genome File: $GENOME_FASTA"
+echo "Cores: $SLURM_CPUS_PER_TASK"
+echo "Time: $(date)"
+echo "----------------------------------------------------"
+
+# 3. Run the Build
+hisat2-build -p $SLURM_CPUS_PER_TASK "$GENOME_FASTA" "$INDEX_PREFIX"
+
+if [ $? -eq 0 ]; then
+    echo "SUCCESS: Index built at $(date)"
+else
+    echo "ERROR: hisat2-build failed. Check the log for specific errors."
+    exit 1
+fi
+```
+
+
+
+
+
 
 
