@@ -612,10 +612,49 @@ export PATH="/opt/anaconda/bin:$PATH"
 
 The BUSCO results confirmed that the assembly was sufficiently complete to serve as a reliable source for chemosensory gene discovery, capturing 76.7% of the expected orthologous groups.
 
+# Proteome Extraction and ORF Prediction (TransDecoder)
+After validating the assembly with BUSCO, we transitioned from raw transcriptomic sequences to a functional proteome. Using TransDecoder (v5.5.0), we identified the specific Open Reading Frames (ORFs) that represent the protein-coding potential of R. appendiculatus.
 
+The Prediction Workflow
 
+This step is critical because it filters out non-coding transcripts and "noise," leaving us with a high-quality set of 56,508 predicted proteins.
 
+SLURM Execution Script
+```bash
+#!/bin/bash
+#SBATCH --job-name=transdecoder_predict
+#SBATCH --partition=debug
+#SBATCH --nodes=1
+#SBATCH --ntasks=32
+#SBATCH --mem=32G
+#SBATCH --time=12:00:00
+#SBATCH --output=/home/amukami/nfs/amukami/R.appendiculatus/trans_%j.log
+#SBATCH --error=/home/amukami/nfs/amukami/R.appendiculatus/trans_%j.err
 
+# 1. Path to environment binaries on NFS
+BIN="/home/amukami/nfs/amukami/tick_tools_env/bin"
+
+# 2. Project Directory
+cd /home/amukami/nfs/amukami/R.appendiculatus
+
+# 3. Define Input Assembly
+TRINITY_FILE="Assembly_Discovery/Trinity.fasta"
+
+echo "--- Starting TransDecoder Pipeline ---"
+date
+
+# 4. Identification of Longest ORFs (>100aa)
+$BIN/TransDecoder.LongOrfs -t $TRINITY_FILE
+
+# 5. Candidate Coding Sequence Prediction
+$BIN/TransDecoder.Predict -t $TRINITY_FILE
+
+date
+echo "--- TransDecoder Finished ---"
+```
+The Result: 56,508 High-Confidence Proteins
+
+The completion of this script produced the 56,508 amino acid sequences (ORFs) found in the Trinity.fasta.transdecoder.pep file.
 
 
 # Proteome Generation and ORF Prediction (TransDecoder)
