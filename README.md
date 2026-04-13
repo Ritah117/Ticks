@@ -553,6 +553,17 @@ printf "===============================================\n"
 | CSP (Chemosensory Proteins)             | 0                     |
 
 
+| Protein Family                          | 1e-2 | 1e-3 | 1e-5 | 1e-10 |
+|----------------------------------------|------|------|------|-------|
+| OR (Odorant Receptors)                 | 0    | 0    | 0    | 0     |
+| GR (Gustatory Receptors)               | 28   | 23   | 20   | 15    |
+| IR (Ionotropic Receptors)              | 92   | 73   | 61   | 53    |
+| OBP (Odorant Binding Proteins)         | 38   | 38   | 35   | 28    |
+| SNMP (Sensory Neuron Membrane Proteins)| 39   | 35   | 33   | 20    |
+| CSP (Chemosensory Proteins)            | 0    | 0    | 0    | 0     |
+| **Total Unique Candidates**            | **197** | **169** | **149** | **116** |
+
+
 
 Sequence Extraction & File Generation
 After identifying the candidate proteins via BLASTp, we extracted the full-length amino acid sequences for each chemosensory family. This ensured that our final datasets contained only the relevant predicted proteins for R. appendiculatus.
