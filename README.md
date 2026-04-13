@@ -56,7 +56,11 @@ tar -cvzf ~/TickProject_Clean_Backup.tar.gz ~/TickProject/raw_data/*_clean.fastq
 # Backup HTML reports and the JSON summary
 tar -cvzf ~/Rapp_Reports_Backup.tar.gz ~/TickProject/raw_data/*.html ~/fastp.json
 ```
+
+
 # 2. Transcriptome Assembly with Trinity
+we first use the denovo way before using the reference based then compare later 
+
 After cleaning the data, the next step was to assemble the short reads into full-length transcripts. For ticks, which have complex transcriptomes, we used the Trinity assembler.
 
 we were able to piece together 205,016 complete  transcripts
@@ -116,8 +120,6 @@ squeue -u amukami
 # Watch the log file for progress (Jellyfish, Inchworm, Chrysalis, Butterfly)
 tail -f trinity_[JOBID].log
 ```
-
-
 
 # 3.Reference Genome Acquisition
 To perform a comparative analysis of chemosensory genes (ORs, IRs, GRs, CSPs, SNMPs, and Binding Proteins), a consolidated reference proteome was constructed. This allows for a standardized search across diverse arthropod lineages.
@@ -443,6 +445,78 @@ The analysis searched 2,934 orthologous groups specific to the Arachnida lineage
 | Fragmented (F)       | 4.4%      | 129   |
 | Missing (M)          | 18.9%     | 555   |
 
+
+
+# Characterization of the R. appendiculatus Chemosensory Repertoire
+# Identifying ORs, IRs, GRs, and Binding Proteins in the R. appendiculatus Proteome
+#Genome Indexing and Mapping Preparation (HISAT2)
+
+To quantify the expression of chemosensory genes, we first mapped our cleaned RNA-seq reads back to the R. appendiculatus reference genome. This requires building a specialized index that allows for rapid, splice-aware alignment.
+ #Reference Acquisition
+ 
+We utilized the high-quality genomic assembly and its corresponding annotation (GTF) to ensure that reads are mapped to known gene loci.
+
+Genome: GCA_030522465.2_ASM3052246v2_genomic.fna
+
+Annotation: genomic.gtf
+
+ #Building the HISAT2 Index
+ 
+The indexing process converts the linear DNA sequence into a FM-index (Burrows-Wheeler Transform), which is optimized for memory efficiency and speed.
+
+A successful build generates 8 files with the .ht2 extension. These are the "roadmaps" the aligner will use.
+
+We utilized a SLURM workload manager to ensure a rapid and stable build.
+
+#The Indexing Script (index_genome.sh)
+```bash
+#!/bin/bash
+#SBATCH --job-name=Rapp_index
+#SBATCH --partition=debug
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=32G
+#SBATCH --time=04:00:00
+#SBATCH --output=index_%j.log
+
+# 1. Load HISAT2
+source /usr/share/Modules/init/bash
+module load hisat2/2.2.1
+
+# 2. Define Paths
+GENOME_DIR="/home/amukami/nfs/R.appendiculatus/references"
+# Using the exact filename found in your 'ls' output
+GENOME_FASTA="${GENOME_DIR}/GCA_030522465.2_ASM3052246v2_genomic.fna"
+INDEX_DIR="${GENOME_DIR}/hisat2_index"
+INDEX_PREFIX="${INDEX_DIR}/Rapp_index"
+
+mkdir -p "$INDEX_DIR"
+
+echo "----------------------------------------------------"
+echo "Starting HISAT2 Build for R. appendiculatus"
+echo "Genome File: $GENOME_FASTA"
+echo "Cores: $SLURM_CPUS_PER_TASK"
+echo "Time: $(date)"
+echo "----------------------------------------------------"
+
+# 3. Run the Build
+hisat2-build -p $SLURM_CPUS_PER_TASK "$GENOME_FASTA" "$INDEX_PREFIX"
+
+if [ $? -eq 0 ]; then
+    echo "SUCCESS: Index built at $(date)"
+else
+    echo "ERROR: hisat2-build failed. Check the log for specific errors."
+    exit 1
+fi
+```
+
+
+
+
+
+
+
 # Protein Prediction (Open Reading Frames)
 To identify potential protein-coding regions within the Trinity transcripts, we used TransDecoder v5.5.0. This process ensures that we are searching actual translated peptides rather than raw nucleotide sequences.
 
@@ -501,94 +575,6 @@ date
 echo "--- Pipeline Finished ---"
 ```
 
-# Functional Annotation (Discovery Phase)
-After generating the proteome, we performed a homology-based search to identify chemosensory and binding proteins.
-
-1. Homology Search (BLASTp)
-
-We used BLASTp (Protein-Protein BLAST) to compare our predicted proteome against a curated database of known arthropod chemoreceptors.
-
-Database: A combined collection of sequences from Ixodes ricinus, Drosophila melanogaster, and other Chelicerata.
-
-Threshold: E-value cutoff of $1 \times 10^{-5}$ to ensure high-confidence matches.
-
-```bash
-# 1. Define the targets (including the binding proteins)
-FAMILIES=("OR" "GR" "IR" "OBP" "SNMP" "CSP")
-
-# 2. Run the Master Search Loop
-echo "--- Starting Master Chemosensory Search ---"
-
-for FAM in "${FAMILIES[@]}"; do
-     echo "Searching for ${FAM}s..."
-     
-     # Reciprocal BLASTp: searching known arthropod genes against your tick proteome
-     blastp -query family_databases/${FAM}_arthropod.fasta \
-            -db R_append_prot_db \
-            -out ${FAM}_tick_matches.tab \
-            -evalue 1e-10 \
-            -outfmt "6 qseqid sseqid pident length evalue bitscore" \
-            -num_threads 4
-done
-
-# 3. Generate the Final Results Summary
-printf "\n===============================================\n"
-printf "   R. appendiculatus DISCOVERY SCOREBOARD\n"
-printf "===============================================\n"
-
-for FAM in "${FAMILIES[@]}"; do
-    # Count unique tick protein IDs (column 2 of the BLAST output)
-    COUNT=$(cut -f2 ${FAM}_tick_matches.tab | sort | uniq | wc -l)
-    printf "%-10s found: %d unique proteins\n" "${FAM}" "${COUNT}"
-done
-printf "===============================================\n"
-```
-| Protein Family                          | Unique Proteins Found |
-| --------------------------------------- | --------------------- |
-| IR (Ionotropic Receptors)               | 53                    |
-| OBP (Odorant Binding Proteins)          | 28                    |
-| SNMP (Sensory Neuron Membrane Proteins) | 20                    |
-| GR (Gustatory Receptors)                | 15                    |
-| OR (Odorant Receptors)                  | 0                     |
-| CSP (Chemosensory Proteins)             | 0                     |
-
-
-| Protein Family                          | 1e-2 | 1e-3 | 1e-5 | 1e-10 |
-|----------------------------------------|------|------|------|-------|
-| OR (Odorant Receptors)                 | 0    | 0    | 0    | 0     |
-| GR (Gustatory Receptors)               | 28   | 23   | 20   | 15    |
-| IR (Ionotropic Receptors)              | 92   | 73   | 61   | 53    |
-| OBP (Odorant Binding Proteins)         | 38   | 38   | 35   | 28    |
-| SNMP (Sensory Neuron Membrane Proteins)| 39   | 35   | 33   | 20    |
-| CSP (Chemosensory Proteins)            | 0    | 0    | 0    | 0     |
-| **Total Unique Candidates**            | **197** | **169** | **149** | **116** |
-
-
-
-Sequence Extraction & File Generation
-After identifying the candidate proteins via BLASTp, we extracted the full-length amino acid sequences for each chemosensory family. This ensured that our final datasets contained only the relevant predicted proteins for R. appendiculatus.
-
-Extraction Workflow
-We used a custom awk script within a bash loop to cross-reference the BLAST hits with the full proteome (Trinity.fasta.transdecoder.pep).
-
-```bash
-# 1. Create a directory for final output
-mkdir -p final_chemo_sequences
-
-# 2. Extract sequences for each family with identified hits
-for FAM in IR GR OBP SNMP; do
-     echo "Extracting ${FAM} sequences..."
-
-     # Step A: Get unique protein IDs from the BLAST results
-     cut -f2 ${FAM}_tick_matches.tab | sort | uniq > ${FAM}_ids.txt
-
-     # Step B: Pull full sequences from the proteome using the ID list
-     awk 'BEGIN{while((getline<"'${FAM}_ids.txt'")>0)l[">"$1]=1} /^>/{f=l[$1]} f' \
-     Trinity.fasta.transdecoder.pep > final_chemo_sequences/R_append_${FAM}_candidates.faa
-
-     echo "Done. Saved to final_chemo_sequences/R_append_${FAM}_candidates.faa"
-done
-```
 
 
 # Assembly Validation and Protein Prediction
@@ -675,13 +661,6 @@ Before we could begin the "Chemoblast" discovery or the HISAT2 indexing, we had 
 
 We used TransDecoder.LongOrfs to scan all transcripts and extract every potential Open Reading Frame longer than 100 amino acids. This is the first "filter" that separates potential proteins from non-coding RNA.
 
-
-
-
-
-
-
-
 # Characterization of the R. appendiculatus Chemosensory Repertoire
 # Identifying ORs, IRs, GRs, and Binding Proteins in the R. appendiculatus Proteome
 #Genome Indexing and Mapping Preparation (HISAT2)
@@ -747,6 +726,93 @@ fi
 ```
 
 
+# Functional Annotation (Discovery Phase)
+After generating the proteome, we performed a homology-based search to identify chemosensory and binding proteins.
+
+1. Homology Search (BLASTp)
+
+We used BLASTp (Protein-Protein BLAST) to compare our predicted proteome against a curated database of known arthropod chemoreceptors.
+
+Database: A combined collection of sequences from Ixodes ricinus, Drosophila melanogaster, and other Chelicerata.
+
+Threshold: E-value cutoff of $1 \times 10^{-5}$ to ensure high-confidence matches.
+
+```bash
+# 1. Define the targets (including the binding proteins)
+FAMILIES=("OR" "GR" "IR" "OBP" "SNMP" "CSP")
+
+# 2. Run the Master Search Loop
+echo "--- Starting Master Chemosensory Search ---"
+
+for FAM in "${FAMILIES[@]}"; do
+     echo "Searching for ${FAM}s..."
+     
+     # Reciprocal BLASTp: searching known arthropod genes against your tick proteome
+     blastp -query family_databases/${FAM}_arthropod.fasta \
+            -db R_append_prot_db \
+            -out ${FAM}_tick_matches.tab \
+            -evalue 1e-10 \
+            -outfmt "6 qseqid sseqid pident length evalue bitscore" \
+            -num_threads 4
+done
+
+# 3. Generate the Final Results Summary
+printf "\n===============================================\n"
+printf "   R. appendiculatus DISCOVERY SCOREBOARD\n"
+printf "===============================================\n"
+
+for FAM in "${FAMILIES[@]}"; do
+    # Count unique tick protein IDs (column 2 of the BLAST output)
+    COUNT=$(cut -f2 ${FAM}_tick_matches.tab | sort | uniq | wc -l)
+    printf "%-10s found: %d unique proteins\n" "${FAM}" "${COUNT}"
+done
+printf "===============================================\n"
+```
+| Protein Family                          | Unique Proteins Found |
+| --------------------------------------- | --------------------- |
+| IR (Ionotropic Receptors)               | 53                    |
+| OBP (Odorant Binding Proteins)          | 28                    |
+| SNMP (Sensory Neuron Membrane Proteins) | 20                    |
+| GR (Gustatory Receptors)                | 15                    |
+| OR (Odorant Receptors)                  | 0                     |
+| CSP (Chemosensory Proteins)             | 0                     |
+
+
+| Protein Family                          | 1e-2 | 1e-3 | 1e-5 | 1e-10 |
+|----------------------------------------|------|------|------|-------|
+| OR (Odorant Receptors)                 | 0    | 0    | 0    | 0     |
+| GR (Gustatory Receptors)               | 28   | 23   | 20   | 15    |
+| IR (Ionotropic Receptors)              | 92   | 73   | 61   | 53    |
+| OBP (Odorant Binding Proteins)         | 38   | 38   | 35   | 28    |
+| SNMP (Sensory Neuron Membrane Proteins)| 39   | 35   | 33   | 20    |
+| CSP (Chemosensory Proteins)            | 0    | 0    | 0    | 0     |
+| **Total Unique Candidates**            | **197** | **169** | **149** | **116** |
+
+
+Sequence Extraction & File Generation
+After identifying the candidate proteins via BLASTp, we extracted the full-length amino acid sequences for each chemosensory family. This ensured that our final datasets contained only the relevant predicted proteins for R. appendiculatus.
+
+Extraction Workflow
+We used a custom awk script within a bash loop to cross-reference the BLAST hits with the full proteome (Trinity.fasta.transdecoder.pep).
+
+```bash
+# 1. Create a directory for final output
+mkdir -p final_chemo_sequences
+
+# 2. Extract sequences for each family with identified hits
+for FAM in IR GR OBP SNMP; do
+     echo "Extracting ${FAM} sequences..."
+
+     # Step A: Get unique protein IDs from the BLAST results
+     cut -f2 ${FAM}_tick_matches.tab | sort | uniq > ${FAM}_ids.txt
+
+     # Step B: Pull full sequences from the proteome using the ID list
+     awk 'BEGIN{while((getline<"'${FAM}_ids.txt'")>0)l[">"$1]=1} /^>/{f=l[$1]} f' \
+     Trinity.fasta.transdecoder.pep > final_chemo_sequences/R_append_${FAM}_candidates.faa
+
+     echo "Done. Saved to final_chemo_sequences/R_append_${FAM}_candidates.faa"
+done
+```
 
 
 
