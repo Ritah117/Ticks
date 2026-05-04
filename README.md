@@ -813,6 +813,260 @@ for FAM in IR GR OBP SNMP; do
      echo "Done. Saved to final_chemo_sequences/R_append_${FAM}_candidates.faa"
 done
 ```
+# Phylogenetic Analysis & Visualization
+ Sequence Preparation and Alignment
+
+To ensure accurate tree topology, we performed multiple sequence alignments (MSA) using high-sensitivity algorithms.
+
+Family Extraction: Full-length amino acid sequences for IRs (53), OBPs (28), SNMPs (20), and GRs (15) were extracted into curated FASTA files.
+
+Alignment: Sequences were aligned using MAFFT v7.475 with the --auto strategy to optimize for both speed and accuracy across different family sizes.
+
+Trimming: Alignments were trimmed using trimAl to remove poorly aligned regions and gaps that could introduce noise into the phylogenetic signal.
+
+
+# Maximum Likelihood Tree Construction
+Phylogenetic trees were constructed using a Maximum Likelihood (ML) framework on the ICIPE High-Performance Computing (HPC) cluster.
+
+Software: IQ-TREE v2.1.2.
+
+Model Selection: The best-fit amino acid substitution model  was automatically selected for each family using ModelFinder.
+
+Statistical Support: Branch support was assessed using Ultrafast Bootstrap (UFBoot2) with 1,000 replicates to ensure the reliability of the identified clusters.
+
+GRs
+```bash
+#!/bin/bash
+#SBATCH --job-name=Ra_GR_Phylo
+#SBATCH --partition=debug
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=32G
+#SBATCH --time=00:30:00
+#SBATCH --output=GR_phylo_%j.log
+
+# 1. Set the Path manually to include your tools
+export PATH="/home/amukami/.conda/envs/tick_tools/bin:$PATH"
+
+# 2. Go to the work directory
+cd /home/amukami
+
+# 3. Diagnostic check (if this fails, the node still can't see the files)
+if [ ! -x "/home/amukami/.conda/envs/tick_tools/bin/mafft" ]; then
+    echo "ERROR: Compute node still cannot execute MAFFT. Check permissions."
+    ls -ld /home/amukami
+    exit 1
+fi
+
+echo "Environment ready. Running MAFFT..."
+mafft --auto --thread 16 GR_tree_input.fasta > GR_aligned.aln
+
+echo "Running trimAl..."
+trimal -in GR_aligned.aln -out GR_trimmed.aln -automated1
+
+echo "Running IQ-TREE..."
+iqtree -s GR_trimmed.aln -m MFP -bb 1000 -nt AUTO -pre Ra_GR_final
+```
+IRs
+```bash
+#!/bin/bash
+#SBATCH --job-name=Ra_IR_Debug
+#SBATCH --partition=debug
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=32G
+#SBATCH --time=01:00:00   # Check your cluster's max debug time (e.g., 00:30:00 or$#SBATCH --output=IR_debug_%j.log
+
+# 1. Faster Alignment
+# --fast is better for high-speed debug runs
+mafft --auto --thread 16 IR_tree_input.fasta > IR_aligned.aln
+
+# 2. Skip Trimming for the debug run to save time
+# (We will add it back for the final production run)
+
+# 3. Fast Tree Construction
+# -fast: Runs a rapid Hill-climbing tree search (much faster than MFP)
+# We remove -bb 1000 because bootstrapping takes too long for debug
+iqtree -s IR_aligned.aln -m LG -fast -nt AUTO -pre Ra_IR_debug_run
+```
+SNMPs
+```bash
+#!/bin/bash
+#SBATCH --job-name=Ra_SNMP_Phylo
+#SBATCH --partition=debug
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=16G
+#SBATCH --time=00:30:00
+#SBATCH --output=SNMP_debug_%j.log
+
+# 1. Alignment
+mafft --auto --thread 16 SNMP_tree_input.fasta > SNMP_aligned.aln
+
+# 2. Trimming
+trimal -in SNMP_aligned.aln -out SNMP_trimmed.aln -automated1
+
+# 3. ML Tree Construction
+# With only 282 sequences, IQ-TREE will be very fast.
+iqtree -s SNMP_trimmed.aln -m MFP -bb 1000 -nt AUTO -pre Ra_SNMP_final
+```
+OBPs
+```bash
+#!/bin/bash
+#SBATCH --job-name=Ra_OBP_Phylo
+#SBATCH --partition=debug
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=16G
+#SBATCH --time=00:30:00   # Adjust if your debug limit is different (e.g., 01:00:$#SBATCH --output=OBP_debug_%j.log
+
+# 1. Alignment (Fast and accurate for smaller sets)
+mafft --auto --thread 16 OBP_tree_input.fasta > OBP_aligned.aln
+
+# 2. Trimming (Essential for OBPs as they can be highly divergent)
+trimal -in OBP_aligned.aln -out OBP_trimmed.aln -automated1
+
+# 3. ML Tree Construction
+# Because this is a smaller set, we can try to keep the bootstraps (-bb 1000)
+# to see if it finishes within the debug window.
+iqtree -s OBP_trimmed.aln -m MFP -bb 1000 -nt AUTO -pre Ra_OBP_final
+```
+
+# Visualization with ggtree
+
+We generated the final trees as circular cladograms in R to facilitate the comparison of R. appendiculatus transcripts against reference insect and tick sequences.
+
+Layout: We utilized circular cladograms to maximize the available space for the 53 identified Ionotropic Receptors (IRs).
+
+Annotation:
+
+Red Labels: We designated these for R. appendiculatus Trinity transcripts.
+
+Black Labels: We used these for reference orthologs from the curated 10-species database.
+
+Reproducibility: We generated all plots using a custom R script leveraging the ggtree and ggplot2 libraries, ensuring consistent formatting across all gene families.
+
+GRs
+```bash
+# 1. Load data
+gr_tree <- read.tree("C:/Users/mukam/Downloads/Ra_GR_final.treefile")
+
+# 2. Plot with names forced into view
+gr_plot_labeled <- ggtree(gr_tree, layout = "circular", branch.length = "none") + 
+  
+  # We use 'label' explicitly here. 
+  geom_tiplab(size = 2, aes(color = grepl("TRINITY", label)), offset = 0.5) +
+  
+  scale_color_manual(values = c("black", "red")) +
+  
+  # 3. Increase xlim significantly. 
+  # If the tree is 'size 10' and xlim is '10', labels at 'offset 0.5' disappear.
+  xlim(0, 50) + 
+  
+  theme(legend.position = "none") +
+  labs(title = "R. appendiculatus GR Tree with Labels")
+
+# 4. View and Save
+print(gr_plot_labeled)
+ggsave("C:/Users/mukam/Desktop/Tick_GR_Labeled.pdf", width = 25, height = 25)
+
+# Saving the plot on the Desktop
+ggsave("C:/Users/mukam/Desktop/Ra_GR_Final_Plot.pdf", 
+       width = 20, 
+       height = 20, 
+       device = "pdf")
+
+#Saving as a picture (PNG) for PowerPoint:
+ggsave("C:/Users/mukam/Desktop/Ra_GR_Final_Plot.png", 
+       width = 15, 
+       height = 15, 
+       dpi = 300)
+```
+
+# OBPS
+
+#1. Load the libraries
+library(ape)
+library(ggtree)
+library(ggplot2)
+
+#2. Re-load the OBP tree file
+obp_tree <- read.tree("C:/Users/mukam/Downloads/Ra_OBP_final.treefile")
+
+# 3. Generate the "Cladogram" (Equalized branch lengths)
+# branch.length = "none" removes the "messy" lopsided look
+obp_cladogram <- ggtree(obp_tree, layout = "circular", branch.length = "none") + 
+  
+  # Add the labels (Red for Trinity, Grey for others)
+  geom_tiplab(size = 1.2, aes(color = grepl("TRINITY", label)), offset = 0.5) +
+  scale_color_manual(values = c("grey70", "red")) +
+  
+  # Remove the legend and adjust the outer limits
+  theme(legend.position = "none") +
+  xlim(0, 35) + 
+  
+  labs(title = "Symmetrical Cladogram: R. appendiculatus OBPs",
+       subtitle = "Branch lengths equalized for visibility")
+
+# 4. Display the plot
+print(obp_cladogram)
+
+
+# Saving as a PDF
+ggsave("C:/Users/mukam/Desktop/Tick_OBP_Tree.pdf", width = 15, height = 15)
+
+# Saving as a PNG 
+ggsave("C:/Users/mukam/Desktop/Tick_OBP_Tree.png", width = 12, height = 12, dpi = 300)
+```
+#SNMP
+```bash
+library(ggplot2)
+library(ggtree)
+
+# 1. RE-LOAD the tree file first 
+snmp_tree <- read.tree("C:/Users/mukam/Downloads/Ra_SNMP_final.treefile")
+
+# 2. Run the plot code
+snmp_circular <- ggtree(snmp_tree, layout = "circular", branch.length = "none") + 
+  geom_tiplab(size = 2, aes(color = grepl("TRINITY", label)), offset = 0.2) +
+  scale_color_manual(values = c("black", "red")) +
+  xlim(0, 30) + 
+  theme(legend.position = "none") +
+  labs(title = "Symmetrical Cladogram: R. appendiculatus SNMPs")
+
+# 3. View it
+print(snmp_circular)
+
+# 4. Save 
+ggsave("C:/Users/mukam/Desktop/Tick_SNMP_Circular.pdf", 
+       plot = snmp_circular, 
+       width = 15, 
+       height = 15)
+```
+
+#IR
+```bash
+library(ggplot2)
+library(ggtree)
+
+# 1. Reload the tree
+ir_tree <- read.tree("C:/Users/mukam/Downloads/Ra_IR_final.treefile")
+
+# 2. Build the plot without xlim or complex offsets
+ir_circular <- ggtree(ir_tree, layout = "circular", branch.length = "none") + 
+  # Use a standard size and a tiny offset
+  geom_tiplab(size = 4, aes(color = grepl("TRINITY", label)), offset = 0.5) +
+  scale_color_manual(values = c("black", "red")) +
+  # theme_tree() helps define the boundaries better than a blank theme
+  theme_tree() +
+  # This expands the plot area automatically so labels fit
+  hexpand(0.3) +
+  labs(title = "R. appendiculatus IRs")
+
+# 3. View it
+print(ir_circular)
+
+# 4. Save
+ggsave("C:/Users/mukam/Desktop/Tick_IR_Circular.png", plot = ir_circular, width = 12, height = 12, dpi = 300)
+```
+
+
 
 
 
