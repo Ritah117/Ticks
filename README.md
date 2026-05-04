@@ -792,7 +792,9 @@ printf "===============================================\n"
 Sequence Extraction & File Generation
 After identifying the candidate proteins via BLASTp, we extracted the full-length amino acid sequences for each chemosensory family. This ensured that our final datasets contained only the relevant predicted proteins for R. appendiculatus.
 
-Extraction Workflow
+With these curated FASTA files, we proceeded to Phylogenetic Analysis, where we aligned these 53 IRs and 15 GRs against our 10-species reference database to confirm their orthology and evolutionary placement
+
+# Extraction Workflow
 We used a custom awk script within a bash loop to cross-reference the BLAST hits with the full proteome (Trinity.fasta.transdecoder.pep).
 
 ```bash
